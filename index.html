@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Pup Café</title>
+<meta name="description" content="A calm, ad-free dog merge café game.">
+<meta name="theme-color" content="#FFF4EA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Pup Café">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <button class="stat paw" id="paw-box" aria-label="Paw points">
+      <span class="sicon">🐾</span>
+      <span class="pawbar"><span id="paw-fill"></span><span class="pawtext"><b id="paw-val">100/100</b><small id="paw-timer">Full</small></span></span>
+    </button>
+    <div class="stat"><span class="sicon">🪙</span><b id="coin-val">0</b></div>
+    <div class="stat"><span class="sicon">⭐</span><b id="star-val">0</b></div>
+    <div class="lvl-badge" id="lvl-ring" aria-label="Café level"><b id="lvl-val">1</b></div>
+  </header>
+
+  <main>
+    <section id="board-view">
+      <div id="orders" class="orders"></div>
+      <div class="board-wrap"><div id="board" class="board"></div></div>
+      <div id="info" class="info"></div>
+      <div id="tip" class="tip" hidden></div>
+    </section>
+    <section id="cafe" class="panel" hidden></section>
+    <section id="book" class="panel" hidden></section>
+    <section id="settings" class="panel" hidden></section>
+  </main>
+
+  <nav class="nav">
+    <button data-tab="board" class="active"><span>🧁</span>Board</button>
+    <button data-tab="cafe"><span>🏠</span>Café<i id="cafe-dot" class="dot" hidden></i></button>
+    <button data-tab="book"><span>📖</span>Pup Book</button>
+    <button data-tab="settings"><span>⚙️</span>Settings</button>
+  </nav>
+</div>
+
+<div id="toast" class="toast"></div>
+<div id="modal" class="modal" hidden><div id="modal-card" class="modal-card"></div></div>
+
+<script src="js/data.js"></script>
+<script src="js/dogs.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
