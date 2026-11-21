@@ -40,9 +40,9 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .stat.paw { flex: 1; padding-right: 6px; }
 .pawbar { position: relative; flex: 1; height: 26px; background: var(--bg2); border-radius: 999px; overflow: hidden; }
 #paw-fill { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #FFC9A8, #FF9FB8); border-radius: 999px; transition: width .4s; }
-.pawtext { position: relative; display: flex; justify-content: space-between; align-items: center; height: 100%; padding: 0 10px; }
+.pawtext { position: relative; display: flex; justify-content: space-between; align-items: center; height: 100%; padding: 0 10px; color: #5B4A52; }
 .pawtext b { font-size: 14px; }
-.pawtext small { font-size: 11px; color: var(--ink); opacity: .75; }
+.pawtext small { font-size: 11px; opacity: .75; }
 .lvl-badge { --p: 0%; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
   background: conic-gradient(var(--accent) var(--p), var(--line) 0); box-shadow: var(--shadow); flex: none; }
 .lvl-badge b { width: 30px; height: 30px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-size: 15px; }
@@ -194,6 +194,7 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 @keyframes floatup { 0% { opacity: 0; transform: translate(-50%, 0) scale(.8); } 15% { opacity: 1; transform: translate(-50%, -10px) scale(1.05); } 100% { opacity: 0; transform: translate(-50%, -60px); } }
 @keyframes spark { 0% { transform: translate(-50%, -50%) scale(.5); opacity: 1; } 100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.1); opacity: 0; } }
 @keyframes fade { from { opacity: 0; } }
+@media (prefers-color-scheme: dark) { .tile.pillow { background: #4A4058 !important; } .tile.pillow .icon { opacity: .6; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
 
 .inline-art { width: 1.25em; height: 1.25em; vertical-align: -0.28em; overflow: visible; }

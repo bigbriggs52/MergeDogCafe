@@ -1,5 +1,5 @@
 // Pup Café service worker: caches the game so it works offline
-const CACHE = 'pupcafe-1.0.0.20261120.1902';
+const CACHE = 'pupcafe-1.0.0.20261120.1904';
 const FILES = ['./', 'index.html', 'css/style.css', 'js/version.js', 'js/data.js', 'js/plush.js', 'js/dogs.js', 'js/audio.js', 'js/game.js',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES))); self.skipWaiting(); });
