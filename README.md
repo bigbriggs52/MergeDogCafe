@@ -1,4 +1,4 @@
-# Pup Café
+# Ally’s Pup Café
 
 A calm, cozy dog merge café game for iPhone. No ads, no purchases, no tracking. Everything stays on the phone.
 
@@ -8,7 +8,7 @@ Merge treats on the board, serve them to visiting pups, and use the stars you ea
 
 1. Open the game's GitHub Pages link in **Safari**.
 2. Tap the **Share** button, then **Add to Home Screen**.
-3. Open Pup Café from the home screen. It runs full screen, saves automatically and works offline.
+3. Open Ally’s Pup Café from the home screen. It runs full screen, saves automatically and works offline.
 
 ## How it plays
 

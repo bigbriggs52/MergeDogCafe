@@ -16,7 +16,7 @@ function newGame() {
   const s = {
     v: 1, board, paw: PAW_BASE_MAX, pawTime: Date.now(), coins: 20, stars: 0, totalStars: 0, level: 1,
     orders: [null, null, null], rooms: ROOMS.map((r) => ({ done: r.tasks.map(() => null) })),
-    book: {}, tip: 0, sfx: 0.7, music: 0.4, finale: false, pending: [], gens: ['bakery', 'drinks'],
+    book: {}, names: {}, tip: 0, sfx: 0.7, music: 0.4, finale: false, pending: [], gens: ['bakery', 'drinks'],
     served: 0, created: Date.now(),
   };
   // Pillows around the edge, with small surprises inside
@@ -55,6 +55,12 @@ function load() {
   } catch (e) { /* ignore broken save */ }
   return null;
 }
+
+/* ---------- Pup names (she can rename any pup) ---------- */
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pupDef = (id) => STAFF[id] || VISITORS.find((v) => v.id === id);
+const pupName = (id) => esc((S.names && S.names[id]) || pupDef(id).name);
+const fillNames = (t) => t.replace(/\{(miso|bean|waffles)\}/g, (_, id) => pupName(id));
 
 /* ---------- Derived values ---------- */
 const roomsDone = () => S.rooms.filter((r) => r.done.every((d) => d !== null)).length;
@@ -291,7 +297,7 @@ function serve(k) {
   Sound.play('serve');
   if (first) {
     const v = VISITORS.find((x) => x.id === o.dog);
-    setTimeout(() => toast(`New pup in your Pup Book: ${v.name} the ${BREEDS[v.breed].label}!`), 600);
+    setTimeout(() => toast(`New pup in your Pup Book: ${pupName(v.id)} the ${BREEDS[v.breed].label}!`), 600);
   }
   if (Math.random() < 0.3 || first) {
     const j = placeNear(idx(3, 4), { t: 'gift' });
@@ -427,7 +433,7 @@ function renderOrders() {
     card.innerHTML = `
       <div class="bubble">${items}</div>
       <div class="dog ${ready ? 'happy' : ''}" data-k="${k}">${dogSVG(v.breed, { mood: ready ? 'happy' : '' })}</div>
-      <div class="dog-name">${v.name}</div>
+      <div class="dog-name">${pupName(v.id)}</div>
       <button class="btn serve ${ready ? 'ready' : ''}" data-serve="${k}" ${ready ? '' : 'disabled'}>Serve</button>`;
     wrap.appendChild(card);
   });
@@ -491,16 +497,16 @@ function renderCafe() {
 function renderBook() {
   const total = VISITORS.length;
   const met = VISITORS.filter((v) => S.book[v.id]).length;
-  let html = `<div class="panel-head"><h2>Pup Book</h2><span class="sub">${met}/${total} pups met</span></div>
+  let html = `<div class="panel-head"><h2>Pup Book</h2><span class="sub">${met}/${total} pups met</span></div><p class="sub book-hint">Tap a pup to see their story or give them a new name.</p>
     <h3>The café crew</h3><div class="book">`;
   Object.entries(STAFF).forEach(([id, s]) => {
-    html += `<div class="page met"><div class="pdog">${dogSVG(s.breed, { mood: 'happy' })}</div><b>${s.name}</b><span>${BREEDS[s.breed].label}</span><em>${s.role}</em></div>`;
+    html += `<div class="page met" data-bio="${id}"><div class="pdog">${dogSVG(s.breed, { mood: 'happy' })}</div><b>${pupName(id)}</b><span>${BREEDS[s.breed].label}</span><em>${s.role}</em></div>`;
   });
   html += `</div><h3>Visitors</h3><div class="book">`;
   VISITORS.forEach((v) => {
     const n = S.book[v.id] || 0;
     const locked = v.room > roomsDone() && !n;
-    html += n ? `<div class="page met" data-bio="${v.id}"><div class="pdog">${dogSVG(v.breed)}</div><b>${v.name}</b><span>${BREEDS[v.breed].label}</span><em>Served ${n}×</em></div>`
+    html += n ? `<div class="page met" data-bio="${v.id}"><div class="pdog">${dogSVG(v.breed)}</div><b>${pupName(v.id)}</b><span>${BREEDS[v.breed].label}</span><em>Served ${n}×</em></div>`
       : `<div class="page"><div class="pdog">${dogSVG(v.breed, { silhouette: true })}</div><b>???</b><span>${v.rare ? 'Rare visitor' : locked ? `Visits after room ${v.room}` : 'Not met yet'}</span></div>`;
   });
   html += '</div>';
@@ -520,7 +526,7 @@ function renderSettings() {
     </div>
     <h3>Game</h3>
     <div class="card version-card">
-      <div class="vrow"><div class="vart">${PLUSH.use('gen-bakery')}</div><div class="vtxt"><b>Pup Café</b><span>Version ${APP_VERSION}</span></div></div>
+      <div class="vrow"><div class="vart">${PLUSH.use('gen-bakery')}</div><div class="vtxt"><b>Ally’s Pup Café</b><span>Version ${APP_VERSION}</span></div></div>
       <button class="btn primary wide" id="check-update">Check for update</button>
       <p class="sub update-status" id="update-status" aria-live="polite"></p>
     </div>
@@ -642,25 +648,51 @@ function modal(html, after) {
   m.querySelectorAll('[data-close]').forEach((b) => (b.onclick = closeModal));
   if (after) after();
 }
+function openPup(id) {
+  const v = pupDef(id);
+  const staff = !!STAFF[id];
+  const custom = S.names && S.names[id];
+  const about = staff ? `<p>${v.role} at the café.</p>` : `<p>${v.bio}</p><p class="sub">Served ${S.book[id]} time${S.book[id] > 1 ? 's' : ''}.</p>`;
+  modal(`<div class="nap-dog">${dogSVG(v.breed, { mood: 'happy' })}</div><h2>${pupName(id)}</h2><p class="sub">${BREEDS[v.breed].label}${custom ? ` · first called ${esc(v.name)}` : ''}</p>${about}
+    <div class="rename" id="rename" hidden>
+      <input id="pup-name" type="text" maxlength="14" autocomplete="off" autocapitalize="words" enterkeyhint="done" value="${pupName(id)}" aria-label="New name">
+      <div class="rename-btns">${custom ? '<button class="btn ghost" id="name-reset">Use original</button>' : ''}<button class="btn primary" id="name-save">Save name</button></div>
+    </div>
+    <div class="pup-btns" id="pup-btns"><button class="btn ghost" id="name-edit">Rename</button><button class="btn primary" data-close>Aww</button></div>`, () => {
+    const box = $('#rename'), input = $('#pup-name');
+    const setName = (name) => {
+      if (!S.names) S.names = {};
+      name = (name || '').replace(/\s+/g, ' ').trim().slice(0, 14);
+      if (!name || name === v.name) delete S.names[id]; else S.names[id] = name;
+      save(); renderBook(); renderOrders();
+      Sound.play('tada'); toast(`Say hi to ${pupName(id)}!`);
+      openPup(id);
+    };
+    $('#name-edit').onclick = () => { box.hidden = false; $('#pup-btns').hidden = true; input.focus(); input.select(); Sound.play('tap'); };
+    $('#name-save').onclick = () => setName(input.value);
+    input.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); setName(input.value); } };
+    const r = $('#name-reset'); if (r) r.onclick = () => setName('');
+  });
+}
 function closeModal() { $('#modal').hidden = true; }
 function openNap() {
   const full = S.paw >= pawMax();
   modal(`<div class="nap-dog">${dogSVG('pug', { mood: 'sleepy' })}</div>
     <h2>${S.paw < 1 ? 'Out of paw points!' : 'Paw points'}</h2>
     <p class="sub">You have ${S.paw} of ${pawMax()}. They refill by 1 every 30 seconds. Serving a pup gives +${SERVE_PAW_BONUS}, and petting a waiting pup gives +${PET_PAW_BONUS}.</p>
-    ${S.paw < 1 ? `<p>Bean can take a quick nap and refill everything, free.</p><button class="btn primary" id="nap-btn">Nap with Bean</button>` : `<p class="sub">When you run out, Bean can nap to refill you for free.</p>`}
+    ${S.paw < 1 ? `<p>${pupName('bean')} can take a quick nap and refill everything, free.</p><button class="btn primary" id="nap-btn">Nap with ${pupName('bean')}</button>` : `<p class="sub">When you run out, ${pupName('bean')} can nap to refill you for free.</p>`}
     <button class="btn ${S.paw < 1 ? '' : 'primary'}" data-close>${full ? 'Okay' : 'Back to the café'}</button>`, () => {
     const b = $('#nap-btn');
     if (b) b.onclick = () => {
       b.disabled = true; b.textContent = 'Zzz...';
       $('.nap-dog').classList.add('napping');
       Sound.play('nap');
-      setTimeout(() => { S.paw = Math.max(S.paw, pawMax()); S.pawTime = Date.now(); renderTop(); save(); closeModal(); toast('Bean feels refreshed! Paw points are full.'); Sound.play('tada'); }, 2200);
+      setTimeout(() => { S.paw = Math.max(S.paw, pawMax()); S.pawTime = Date.now(); renderTop(); save(); closeModal(); toast(`${pupName('bean')} feels refreshed! Paw points are full.`); Sound.play('tada'); }, 2200);
     };
   });
 }
 function showFinale() {
-  modal(`<div class="big-art">${PLUSH.use('bakery-8')}</div><h2>The grand pup party!</h2><p>Every room of Pup Café is finished. Miso, Bean and Waffles throw the biggest party in town!</p><p class="sub">You can keep serving pups, collecting the Pup Book and restyling any room.</p><button class="btn primary" data-close>Party time!</button>`);
+  modal(`<div class="big-art">${PLUSH.use('bakery-8')}</div><h2>The grand pup party!</h2><p>Every room of Ally’s Pup Café is finished. ${pupName('miso')}, ${pupName('bean')} and ${pupName('waffles')} throw the biggest party in town!</p><p class="sub">You can keep serving pups, collecting the Pup Book and restyling any room.</p><button class="btn primary" data-close>Party time!</button>`);
   Sound.play('tada');
 }
 function advanceTip(n) {
@@ -672,7 +704,7 @@ function showTip() {
   const t = $('#tip');
   if (S.tip >= TIPS.length) { t.hidden = true; $('#info').hidden = false; return; }
   t.hidden = false; $('#info').hidden = true;
-  t.innerHTML = `<div class="tip-dog">${dogSVG('shiba', { mood: 'happy' })}</div><div class="tip-text">${TIPS[S.tip]}</div><button class="tip-x" aria-label="Dismiss">✕</button>`;
+  t.innerHTML = `<div class="tip-dog">${dogSVG('shiba', { mood: 'happy' })}</div><div class="tip-text">${fillNames(TIPS[S.tip])}</div><button class="tip-x" aria-label="Dismiss">✕</button>`;
   t.querySelector('.tip-x').onclick = () => { S.tip = S.tip === 3 ? 4 : S.tip; t.hidden = true; $('#info').hidden = false; if (S.tip >= 3) S.tip = TIPS.length; save(); };
 }
 function switchTab(name) {
@@ -833,8 +865,7 @@ function setupUI() {
   $('#book').addEventListener('click', (e) => {
     const p = e.target.closest('[data-bio]');
     if (!p) return;
-    const v = VISITORS.find((x) => x.id === p.dataset.bio);
-    modal(`<div class="nap-dog">${dogSVG(v.breed, { mood: 'happy' })}</div><h2>${v.name}</h2><p class="sub">${BREEDS[v.breed].label}</p><p>${v.bio}</p><p class="sub">Served ${S.book[v.id]} time${S.book[v.id] > 1 ? 's' : ''}.</p><button class="btn primary" data-close>Aww</button>`);
+    openPup(p.dataset.bio);
     Sound.play('boop');
   });
   $('#modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });

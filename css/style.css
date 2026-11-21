@@ -243,3 +243,16 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 /* Holding a treat box: soft glow while it keeps making treats */
 #board, #board * { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
 .cell.holding > * { box-shadow: 0 0 0 3px var(--accent, #F6A5C0), 0 0 14px 2px rgba(255,143,171,.5); border-radius: 14px; }
+
+/* Pup names */
+.dog-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page b { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.book-hint { margin: -4px 2px 8px; }
+.pup-btns, .rename-btns { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+.pup-btns .btn, .rename-btns .btn { flex: 1; }
+.rename { margin-top: 6px; }
+.rename input { width: 100%; box-sizing: border-box; font: 700 18px ui-rounded, 'SF Pro Rounded', system-ui, sans-serif; text-align: center;
+  padding: 10px 12px; border-radius: 14px; border: 2px solid var(--line); background: var(--bg); color: var(--ink);
+  -webkit-user-select: text; user-select: text; outline: none; }
+.rename input:focus { border-color: var(--accent); }
+.pup-btns[hidden] { display: none; }
