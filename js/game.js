@@ -324,12 +324,14 @@ function checkLevel() {
 function totalForLevel(l) { let t = 0; for (let k = 1; k < l; k++) t += levelNeed(k); return t; }
 
 /* ---------- Café ---------- */
+let lastAdded = null;
 function doTask(roomIdx, taskIdx, styleIdx) {
   const cost = taskCost(roomIdx, taskIdx);
   if (S.stars < cost) return;
   const wasDone = roomsDone();
   S.stars -= cost;
   S.rooms[roomIdx].done[taskIdx] = styleIdx;
+  lastAdded = { r: roomIdx, i: taskIdx, t: Date.now() };
   Sound.play('tada');
   const nowDone = roomsDone();
   if (nowDone > wasDone) {
@@ -346,6 +348,7 @@ function doTask(roomIdx, taskIdx, styleIdx) {
 }
 function restyle(roomIdx, taskIdx, styleIdx) {
   S.rooms[roomIdx].done[taskIdx] = styleIdx;
+  lastAdded = { r: roomIdx, i: taskIdx, t: Date.now() };
   Sound.play('tap'); renderCafe(); save();
 }
 
@@ -397,7 +400,7 @@ function renderTop() {
   if (S.paw < pawMax()) {
     const left = PAW_REGEN_MS - ((Date.now() - S.pawTime) % PAW_REGEN_MS);
     t.textContent = `+1 in ${Math.ceil(left / 1000)}s`;
-  } else t.textContent = 'Full';
+  } else t.textContent = S.paw > pawMax() ? 'Bonus!' : 'Full';
   $('#cafe-dot').hidden = !(S.stars >= cheapestTask());
 }
 function cheapestTask() {
@@ -450,18 +453,8 @@ function renderCafe() {
   const r = currentRoom();
   const room = ROOMS[r];
   const done = S.rooms[r].done;
-  // dominant style
-  const counts = [0, 0, 0]; done.forEach((d) => d !== null && counts[d]++);
-  const st = STYLES[counts.indexOf(Math.max(...counts))] || STYLES[0];
-  const dusty = done.every((d) => d === null);
-  let scene = `<div class="scene ${dusty ? 'dusty' : ''}" style="--wall:${st.wall};--floor:${st.floor}">
-    <div class="wall"></div><div class="floor"></div>`;
-  room.tasks.forEach(([name, icon, x, y], i) => {
-    if (done[i] !== null) scene += `<div class="deco" data-restyle="${i}" style="left:${x}%;top:${y}%;--pad:${STYLES[done[i]].pad}">${PLUSH.use(icon)}</div>`;
-  });
-  scene += `<div class="staff s1">${dogSVG('shiba', { mood: dusty ? '' : 'happy' })}</div>
-    <div class="staff s2">${dogSVG('pug', { mood: 'happy' })}</div>
-    <div class="staff s3">${dogSVG('corgi', { mood: '' })}</div></div>`;
+  const pop = lastAdded && lastAdded.r === r && Date.now() - lastAdded.t < 2500 ? lastAdded.i : -1;
+  const scene = `<div class="scene-wrap">${SCENES.render(r, done, pop)}<p class="scene-hint">${done.some((d) => d !== null) ? 'Tap anything you\'ve added to change its style.' : 'Spend stars on the list below to fix up this room.'}</p></div>`;
   const doneCount = done.filter((d) => d !== null).length;
   let list = '';
   room.tasks.forEach(([name, icon], i) => {
