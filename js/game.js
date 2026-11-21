@@ -519,6 +519,8 @@ function renderSettings() {
       <label class="srow"><span>Music</span><input type="range" min="0" max="1" step="0.05" value="${S.music}" id="music-vol"></label>
       <label class="srow"><span>Sounds</span><input type="range" min="0" max="1" step="0.05" value="${S.sfx}" id="sfx-vol"></label>
     </div>
+    <h3>Suggestion box</h3>
+    ${suggestCardHTML()}
     <h3>Backup</h3>
     <div class="card">
       <p class="sub">Your café saves on this phone automatically. A backup code lets you move it to a new phone.</p>
@@ -530,10 +532,11 @@ function renderSettings() {
       <button class="btn primary wide" id="check-update">Check for update</button>
       <p class="sub update-status" id="update-status" aria-live="polite"></p>
     </div>
-    <p class="sub center">No ads, no purchases, no tracking. Everything stays on this phone.<br>Served ${S.served} pups · ${S.totalStars} stars earned.</p>
+    <p class="sub center">No ads, no purchases, no tracking. Your café stays on this phone, and only ideas you send leave it.<br>Served ${S.served} pups · ${S.totalStars} stars earned.</p>
     <button class="btn danger-ghost wide" id="reset-game">Start over</button>`;
   $('#music-vol').oninput = (e) => { S.music = +e.target.value; Sound.setMusic(S.music); save(); };
   $('#sfx-vol').oninput = (e) => { S.sfx = +e.target.value; Sound.setSfx(S.sfx); save(); };
+  setupSuggestCard();
   $('#copy-backup').onclick = copyBackup;
   $('#check-update').onclick = checkForUpdate;
   $('#restore-backup').onclick = () => modal(`<h2>Restore</h2><p class="sub">Paste a backup code. This replaces the café on this phone.</p><textarea id="restore-text" rows="4"></textarea><div class="row-btns"><button class="btn" data-close>Cancel</button><button class="btn primary" id="do-restore">Restore</button></div>`, () => {
