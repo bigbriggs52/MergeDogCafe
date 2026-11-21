@@ -124,9 +124,9 @@ function placeNear(i, it) {
 }
 function tapGenerator(i) {
   const g = S.board[i];
-  if (S.paw < 1) { openNap(); return; }
+  if (S.paw < 1) { openNap(); return false; }
   const free = emptyCellsNear(i);
-  if (!free.length) { toast('The board is full. Merge or sell something to make room.'); Sound.play('nope'); return; }
+  if (!free.length) { toast('The board is full. Merge or sell something to make room.'); Sound.play('nope'); return false; }
   S.paw -= 1;
   if (S.paw < pawMax() && S.pawTime > Date.now()) S.pawTime = Date.now();
   let it;
@@ -142,6 +142,7 @@ function tapGenerator(i) {
   bounceCell(i, 'squish'); bounceCell(j, 'appear', i);
   if (S.tip === 0) advanceTip(1);
   save();
+  return true;
 }
 function collectHelper(i) {
   const h = S.board[i];
@@ -442,7 +443,7 @@ function renderInfo() {
     text = `<b>${d.name}</b> · Level ${it.l} of ${MAX_LEVEL}${next ? ` · Merge two to make a ${next[1]}` : ' · Top level!'}`;
     btn = `<button class="btn small" id="sell-btn">Sell 🪙${sellValue(it)}</button>`;
   } else if (it.t === 'gen') {
-    text = `<b>${d.name}</b> ${'★'.repeat(it.l)} · Tap to make ${CHAINS[it.c].name.toLowerCase()} treats (1 🐾).${it.l < GEN_MAX_LEVEL ? ' Merge two to upgrade.' : ''}`;
+    text = `<b>${d.name}</b> ${'★'.repeat(it.l)} · Tap or hold to make ${CHAINS[it.c].name.toLowerCase()} treats (1 🐾).${it.l < GEN_MAX_LEVEL ? ' Merge two to upgrade.' : ''}`;
   } else if (it.t === 'help') {
     text = `<b>${d.name}</b> · Tap to collect ${HELPERS[it.h].values[it.l - 1]} ${HELPERS[it.h].unit}.${it.l < 4 ? ' Merge two for more.' : ''}`;
   } else if (it.t === 'gift') text = `<b>Gift Box</b> · Tap to open!`;
@@ -689,6 +690,24 @@ function switchTab(name) {
 function setupBoardInput() {
   const board = $('#board');
   let start = null, ghost = null, from = -1, overEl = null;
+  // Press and hold a treat box to keep making treats at a calm pace.
+  const HOLD_DELAY = 380, HOLD_EVERY = 240;
+  let holdT = 0, holdI = -1;
+  const markHeld = (on) => { const el = holdI >= 0 && cellEl(holdI); el && el.classList.toggle('holding', on); };
+  const stopHold = () => { clearTimeout(holdT); holdT = 0; markHeld(false); holdI = -1; };
+  const holdStep = () => {
+    if (!start || start.moved || holdI < 0) return stopHold();
+    const g = S.board[holdI];
+    if (!g || g.t !== 'gen') return stopHold();
+    start.held = true;
+    selected = holdI;
+    const ok = tapGenerator(holdI);
+    renderInfo();
+    if (!ok) return stopHold();
+    markHeld(true);
+    holdT = setTimeout(holdStep, HOLD_EVERY);
+  };
+  board.addEventListener('contextmenu', (e) => e.preventDefault());
   const cellAt = (x, y) => {
     const el = document.elementFromPoint(x, y);
     const c = el && el.closest('.cell');
@@ -701,9 +720,11 @@ function setupBoardInput() {
     const i = +c.dataset.i;
     const it = S.board[i];
     if (!it) { selected = -1; renderBoard(); renderInfo(); return; }
-    start = { x: e.clientX, y: e.clientY, i, moved: false };
+    start = { x: e.clientX, y: e.clientY, i, moved: false, held: false };
     from = i;
     board.setPointerCapture(e.pointerId);
+    stopHold();
+    if (it.t === 'gen') { holdI = i; holdT = setTimeout(holdStep, HOLD_DELAY); }
   });
   board.addEventListener('pointermove', (e) => {
     if (!start) return;
@@ -712,6 +733,8 @@ function setupBoardInput() {
       const it = S.board[from];
       if (!it || it.t === 'pillow') return;
       start.moved = true;
+      stopHold();
+      if (start.held) return;
       const tile = cellEl(from).firstElementChild;
       ghost = tile.cloneNode(true);
       ghost.classList.add('ghost');
@@ -720,7 +743,7 @@ function setupBoardInput() {
       document.body.appendChild(ghost);
       tile.classList.add('lifted');
     }
-    if (start.moved) {
+    if (start.moved && ghost) {
       const r = ghost.getBoundingClientRect();
       ghost.style.left = `${e.clientX - r.width / 2}px`; ghost.style.top = `${e.clientY - r.height / 2 - 18}px`;
       const j = cellAt(e.clientX, e.clientY - 18);
@@ -735,7 +758,9 @@ function setupBoardInput() {
   const end = (e) => {
     if (!start) return;
     const s = start; start = null;
+    stopHold();
     overEl && overEl.classList.remove('over', 'can-merge'); overEl = null;
+    if (s.held) return;
     if (s.moved) {
       const j = cellAt(e.clientX, e.clientY - 18);
       ghost && ghost.remove(); ghost = null;
@@ -755,7 +780,7 @@ function setupBoardInput() {
     bounceCell(s.i, 'squish');
   };
   board.addEventListener('pointerup', end);
-  board.addEventListener('pointercancel', (e) => { if (start && start.moved) { ghost && ghost.remove(); ghost = null; const t = cellEl(from).firstElementChild; t && t.classList.remove('lifted'); } start = null; });
+  board.addEventListener('pointercancel', (e) => { stopHold(); if (start && start.moved) { ghost && ghost.remove(); ghost = null; const t = cellEl(from).firstElementChild; t && t.classList.remove('lifted'); } start = null; });
 }
 
 function setupUI() {
