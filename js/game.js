@@ -324,15 +324,18 @@ function checkLevel() {
 function totalForLevel(l) { let t = 0; for (let k = 1; k < l; k++) t += levelNeed(k); return t; }
 
 /* ---------- Café ---------- */
+let lastAdded = null;
 function doTask(roomIdx, taskIdx, styleIdx) {
   const cost = taskCost(roomIdx, taskIdx);
   if (S.stars < cost) return;
   const wasDone = roomsDone();
   S.stars -= cost;
   S.rooms[roomIdx].done[taskIdx] = styleIdx;
+  lastAdded = { r: roomIdx, i: taskIdx, t: Date.now() };
   Sound.play('tada');
   const nowDone = roomsDone();
   if (nowDone > wasDone) {
+    viewRoom = null;
     const room = ROOMS[roomIdx];
     if (room.unlock.gen && !S.gens.includes(room.unlock.gen)) {
       S.gens.push(room.unlock.gen);
@@ -346,6 +349,7 @@ function doTask(roomIdx, taskIdx, styleIdx) {
 }
 function restyle(roomIdx, taskIdx, styleIdx) {
   S.rooms[roomIdx].done[taskIdx] = styleIdx;
+  lastAdded = { r: roomIdx, i: taskIdx, t: Date.now() };
   Sound.play('tap'); renderCafe(); save();
 }
 
@@ -397,7 +401,7 @@ function renderTop() {
   if (S.paw < pawMax()) {
     const left = PAW_REGEN_MS - ((Date.now() - S.pawTime) % PAW_REGEN_MS);
     t.textContent = `+1 in ${Math.ceil(left / 1000)}s`;
-  } else t.textContent = 'Full';
+  } else t.textContent = S.paw > pawMax() ? 'Bonus!' : 'Full';
   $('#cafe-dot').hidden = !(S.stars >= cheapestTask());
 }
 function cheapestTask() {
@@ -446,22 +450,16 @@ function renderInfo() {
   info.innerHTML = `<span class="mini" style="background:${d.color}">${PLUSH.use(artKey(it))}</span><span class="txt">${text}</span>${btn}`;
   const sb = $('#sell-btn'); if (sb) sb.onclick = sellSelected;
 }
+let viewRoom = null; // which café room is on screen (null = the room being worked on)
+const shownRoom = () => (viewRoom === null || viewRoom > currentRoom() ? currentRoom() : viewRoom);
 function renderCafe() {
-  const r = currentRoom();
+  const r = shownRoom();
+  const cur = currentRoom();
+  const finished = r < roomsDone();
   const room = ROOMS[r];
   const done = S.rooms[r].done;
-  // dominant style
-  const counts = [0, 0, 0]; done.forEach((d) => d !== null && counts[d]++);
-  const st = STYLES[counts.indexOf(Math.max(...counts))] || STYLES[0];
-  const dusty = done.every((d) => d === null);
-  let scene = `<div class="scene ${dusty ? 'dusty' : ''}" style="--wall:${st.wall};--floor:${st.floor}">
-    <div class="wall"></div><div class="floor"></div>`;
-  room.tasks.forEach(([name, icon, x, y], i) => {
-    if (done[i] !== null) scene += `<div class="deco" data-restyle="${i}" style="left:${x}%;top:${y}%;--pad:${STYLES[done[i]].pad}">${PLUSH.use(icon)}</div>`;
-  });
-  scene += `<div class="staff s1">${dogSVG('shiba', { mood: dusty ? '' : 'happy' })}</div>
-    <div class="staff s2">${dogSVG('pug', { mood: 'happy' })}</div>
-    <div class="staff s3">${dogSVG('corgi', { mood: '' })}</div></div>`;
+  const pop = lastAdded && lastAdded.r === r && Date.now() - lastAdded.t < 2500 ? lastAdded.i : -1;
+  const scene = `<div class="scene-wrap">${SCENES.render(r, done, pop)}<p class="scene-hint">${done.some((d) => d !== null) ? 'Tap anything you\'ve added to change its style.' : 'Spend stars on the list below to fix up this room.'}</p></div>`;
   const doneCount = done.filter((d) => d !== null).length;
   let list = '';
   room.tasks.forEach(([name, icon], i) => {
@@ -469,20 +467,25 @@ function renderCafe() {
     if (done[i] !== null) list += `<div class="task done"><span class="ticon">${PLUSH.use(icon)}</span><span class="tname">${name}</span><button class="btn small ghost" data-restyle="${i}">Restyle</button></div>`;
     else list += `<div class="task"><span class="ticon">${PLUSH.use(icon)}</span><span class="tname">${name}</span><button class="btn small ${S.stars >= cost ? 'primary' : ''}" data-task="${i}" ${S.stars >= cost ? '' : 'disabled'}>${withArt('⭐')} ${cost}</button></div>`;
   });
-  const roomsNav = ROOMS.map((rm, k) => `<span class="room-pip ${k < roomsDone() ? 'done' : k === r ? 'cur' : ''}">${k + 1}</span>`).join('');
+  const roomsNav = ROOMS.map((rm, k) => {
+    const open = k <= cur;
+    const cls = [k === r ? 'on' : '', k < roomsDone() ? 'done' : '', open ? '' : 'locked'].join(' ');
+    return `<button class="room-tab ${cls}" data-room="${k}" ${open ? '' : 'disabled'} aria-label="${open ? rm.name : 'Locked room'}">${open ? k + 1 : '🔒'}</button>`;
+  }).join('');
+  const arrows = `<button class="room-arrow" data-room="${r - 1}" ${r > 0 ? '' : 'disabled'} aria-label="Previous room">‹</button>` +
+    `<button class="room-arrow" data-room="${r + 1}" ${r < cur ? '' : 'disabled'} aria-label="Next room">›</button>`;
   $('#cafe').innerHTML = `
-    <div class="panel-head"><h2>${room.name}</h2><div class="rooms-nav">${roomsNav}</div></div>
+    <div class="room-head"><div class="room-title"><h2>${room.name}</h2><span class="room-sub">Room ${r + 1} of ${ROOMS.length}${finished ? ' · Finished' : r === cur ? ' · In progress' : ''}</span></div><div class="room-arrows">${arrows}</div></div>
+    <div class="room-tabs">${roomsNav}</div>
     ${scene}
     <div class="progress-line"><div class="bar"><div style="width:${doneCount / room.tasks.length * 100}%"></div></div><span>${doneCount}/${room.tasks.length}</span></div>
-    <p class="sub">${S.finale ? 'The café is complete! Keep serving pups and restyling rooms.' : `Finish this room to unlock: ${room.unlockText}.`}</p>
+    <p class="sub">${finished ? (r === cur && S.finale ? 'The café is complete! Keep serving pups and restyling rooms.' : 'All done here. Tap any piece or Restyle to change its look.') : `Finish this room to unlock: ${room.unlockText}.`}</p>${r !== cur ? `<button class="btn ghost wide back-cur" data-room="${cur}">Back to ${ROOMS[cur].name}</button>` : ''}
     <div class="tasks">${list}</div>
     <h3>Pantry shop</h3>
     <div class="tasks">
       <div class="task"><span class="ticon">${PLUSH.use('bakery-2')}</span><span class="tname">Paw snack: +50 paw points</span><button class="btn small" data-buy="paw" ${S.coins >= 40 ? '' : 'disabled'}>${withArt('🪙')} 40</button></div>
       ${S.gens.map((g) => `<div class="task"><span class="ticon">${PLUSH.use('gen-' + g)}</span><span class="tname">Extra ${CHAINS[g].gen.name}</span><button class="btn small" data-buy="gen:${g}" ${S.coins >= 250 ? '' : 'disabled'}>${withArt('🪙')} 250</button></div>`).join('')}
-    </div>
-    <h3>Earlier rooms</h3>
-    <div class="tasks">${ROOMS.slice(0, roomsDone()).map((rm, k) => k === r ? '' : `<div class="task done"><span class="ticon">${PLUSH.use('star')}</span><span class="tname">${rm.name}</span><button class="btn small ghost" data-visit="${k}">Restyle</button></div>`).join('') || '<p class="sub">None yet.</p>'}</div>`;
+    </div>`;
 }
 function renderBook() {
   const total = VISITORS.length;
@@ -766,7 +769,13 @@ function setupUI() {
   });
   $('#paw-box').onclick = () => { Sound.init(); openNap(); };
   $('#cafe').addEventListener('click', (e) => {
-    const r = currentRoom();
+    const nav = e.target.closest('[data-room]');
+    if (nav && !nav.disabled) {
+      const k = +nav.dataset.room;
+      if (k >= 0 && k <= currentRoom()) { viewRoom = k === currentRoom() ? null : k; Sound.play('tap'); renderCafe(); $('#cafe').scrollTop = 0; }
+      return;
+    }
+    const r = shownRoom();
     const t = e.target.closest('[data-task]');
     if (t) {
       const i = +t.dataset.task;
