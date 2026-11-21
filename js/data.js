@@ -134,7 +134,7 @@ const ROOMS = [
 function taskCost(roomIdx, taskIdx) { return 2 + roomIdx + Math.floor(taskIdx / 2); }
 
 const TIPS = [
-  'Welcome to Pup Café! I\'m Miso. Tap the Cookie Jar to bake a treat, or hold it to make a bunch.',
+  'Welcome to Ally’s Pup Café! I\'m {miso}. Tap the Cookie Jar to bake a treat, or hold it to make a bunch.',
   'Drag one treat onto a matching treat to squish them into something better.',
   'The pups at the counter show what they\'d like. When you have it, tap Serve!',
   'You earned stars! Open the Café tab to start fixing the place up.',

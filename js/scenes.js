@@ -84,7 +84,7 @@ const SCENES = (() => {
           `<path d="M172 0 L182 22 M228 0 L218 22" ${st(2)}/>` +
           `<rect x="136" y="18" width="128" height="44" rx="14" fill="${p.light}" ${st()}/>` +
           `<rect x="143" y="25" width="114" height="30" rx="9" fill="none" stroke="${p.accent}" stroke-width="2.5" stroke-dasharray="6 4"/>` +
-          `<text x="208" y="47" text-anchor="middle" font-family="ui-rounded, 'SF Pro Rounded', system-ui, sans-serif" font-weight="800" font-size="19" fill="${O}">Pup Café</text>` +
+          `<text x="213" text-anchor="middle" font-family="ui-rounded, 'SF Pro Rounded', system-ui, sans-serif" font-weight="800" fill="${O}"><tspan x="213" y="37" font-size="10">Ally’s</tspan><tspan x="213" y="51" font-size="15">Pup Café</tspan></text>` +
           paw(156, 40, 0.75, p.dark) },
         { z: 3, draw: (p) =>
           `<rect x="128" y="62" width="46" height="48" rx="10" fill="${p.accent}" ${st()}/><rect x="134" y="70" width="34" height="12" rx="5" fill="${p.light}" ${st(2)}/>` +
