@@ -19,11 +19,11 @@
 <div id="app">
   <header class="top">
     <button class="stat paw" id="paw-box" aria-label="Paw points">
-      <span class="sicon">🐾</span>
+      <span class="sicon"><svg viewBox="0 0 100 100"><use href="#p-paw"/></svg></span>
       <span class="pawbar"><span id="paw-fill"></span><span class="pawtext"><b id="paw-val">100/100</b><small id="paw-timer">Full</small></span></span>
     </button>
-    <div class="stat"><span class="sicon">🪙</span><b id="coin-val">0</b></div>
-    <div class="stat"><span class="sicon">⭐</span><b id="star-val">0</b></div>
+    <div class="stat"><span class="sicon"><svg viewBox="0 0 100 100"><use href="#p-coin"/></svg></span><b id="coin-val">0</b></div>
+    <div class="stat"><span class="sicon"><svg viewBox="0 0 100 100"><use href="#p-star"/></svg></span><b id="star-val">0</b></div>
     <div class="lvl-badge" id="lvl-ring" aria-label="Café level"><b id="lvl-val">1</b></div>
   </header>
 
@@ -40,17 +40,19 @@
   </main>
 
   <nav class="nav">
-    <button data-tab="board" class="active"><span>🧁</span>Board</button>
-    <button data-tab="cafe"><span>🏠</span>Café<i id="cafe-dot" class="dot" hidden></i></button>
-    <button data-tab="book"><span>📖</span>Pup Book</button>
-    <button data-tab="settings"><span>⚙️</span>Settings</button>
+    <button data-tab="board" class="active"><span><svg viewBox="0 0 100 100"><use href="#p-cupcake-nav"/></svg></span>Board</button>
+    <button data-tab="cafe"><span><svg viewBox="0 0 100 100"><use href="#p-house"/></svg></span>Café<i id="cafe-dot" class="dot" hidden></i></button>
+    <button data-tab="book"><span><svg viewBox="0 0 100 100"><use href="#p-book"/></svg></span>Pup Book</button>
+    <button data-tab="settings"><span><svg viewBox="0 0 100 100"><use href="#p-gear"/></svg></span>Settings</button>
   </nav>
 </div>
 
 <div id="toast" class="toast"></div>
 <div id="modal" class="modal" hidden><div id="modal-card" class="modal-card"></div></div>
 
+<script src="js/version.js"></script>
 <script src="js/data.js"></script>
+<script src="js/plush.js"></script>
 <script src="js/dogs.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/game.js"></script>
