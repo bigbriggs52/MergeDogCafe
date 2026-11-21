@@ -128,8 +128,8 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .scene .wall { position: absolute; inset: 0 0 32% 0; background: var(--wall); background-image: radial-gradient(rgba(255,255,255,.5) 2px, transparent 2px); background-size: 18px 18px; transition: background-color .6s; }
 .scene .floor { position: absolute; inset: 68% 0 0 0; background: var(--floor); background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 2px, transparent 2px 40px); transition: background-color .6s; }
 .scene.dusty { filter: saturate(.35) brightness(.95); }
-.deco { position: absolute; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--pad); box-shadow: 0 3px 0 rgba(0,0,0,.08); animation: appear .5s cubic-bezier(.3,1.5,.5,1); cursor: pointer; }
-.deco span { font-size: 26px; }
+.deco { position: absolute; transform: translate(-50%, -50%); width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; background: var(--pad); box-shadow: 0 3px 0 rgba(0,0,0,.08); animation: appear .5s cubic-bezier(.3,1.5,.5,1); cursor: pointer; }
+.deco svg { width: 40px; height: 40px; overflow: visible; }
 .staff { position: absolute; bottom: 4px; width: 62px; height: 60px; animation: breathe 2.8s ease-in-out infinite; transform-origin: 50% 100%; }
 .staff.s1 { left: 36%; } .staff.s2 { left: 6%; animation-delay: -.8s; } .staff.s3 { right: 6%; animation-delay: -1.6s; }
 .progress-line { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; font-weight: 700; }
@@ -178,7 +178,8 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .nap-dog.napping { animation: breathe 1s ease-in-out infinite; }
 .styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0; }
 .style-opt { background: var(--wall); border-radius: 18px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #5B4A52; box-shadow: var(--shadow); }
-.style-opt .sicon { width: 50px; height: 50px; border-radius: 50%; background: var(--pad); display: grid; place-items: center; font-size: 28px; }
+.style-opt .sicon { width: 56px; height: 56px; border-radius: 50%; background: var(--pad); display: grid; place-items: center; }
+.style-opt .sicon svg { width: 44px; height: 44px; overflow: visible; }
 .style-opt.cur { outline: 3px solid var(--accent); }
 
 /* Animations */

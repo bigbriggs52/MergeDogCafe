@@ -457,7 +457,7 @@ function renderCafe() {
   let scene = `<div class="scene ${dusty ? 'dusty' : ''}" style="--wall:${st.wall};--floor:${st.floor}">
     <div class="wall"></div><div class="floor"></div>`;
   room.tasks.forEach(([name, icon, x, y], i) => {
-    if (done[i] !== null) scene += `<div class="deco" data-restyle="${i}" style="left:${x}%;top:${y}%;--pad:${STYLES[done[i]].pad}"><span>${icon}</span></div>`;
+    if (done[i] !== null) scene += `<div class="deco" data-restyle="${i}" style="left:${x}%;top:${y}%;--pad:${STYLES[done[i]].pad}">${PLUSH.use(icon)}</div>`;
   });
   scene += `<div class="staff s1">${dogSVG('shiba', { mood: dusty ? '' : 'happy' })}</div>
     <div class="staff s2">${dogSVG('pug', { mood: 'happy' })}</div>
@@ -466,8 +466,8 @@ function renderCafe() {
   let list = '';
   room.tasks.forEach(([name, icon], i) => {
     const cost = taskCost(r, i);
-    if (done[i] !== null) list += `<div class="task done"><span class="ticon">${icon}</span><span class="tname">${name}</span><button class="btn small ghost" data-restyle="${i}">Restyle</button></div>`;
-    else list += `<div class="task"><span class="ticon">${icon}</span><span class="tname">${name}</span><button class="btn small ${S.stars >= cost ? 'primary' : ''}" data-task="${i}" ${S.stars >= cost ? '' : 'disabled'}>${withArt('⭐')} ${cost}</button></div>`;
+    if (done[i] !== null) list += `<div class="task done"><span class="ticon">${PLUSH.use(icon)}</span><span class="tname">${name}</span><button class="btn small ghost" data-restyle="${i}">Restyle</button></div>`;
+    else list += `<div class="task"><span class="ticon">${PLUSH.use(icon)}</span><span class="tname">${name}</span><button class="btn small ${S.stars >= cost ? 'primary' : ''}" data-task="${i}" ${S.stars >= cost ? '' : 'disabled'}>${withArt('⭐')} ${cost}</button></div>`;
   });
   const roomsNav = ROOMS.map((rm, k) => `<span class="room-pip ${k < roomsDone() ? 'done' : k === r ? 'cur' : ''}">${k + 1}</span>`).join('');
   $('#cafe').innerHTML = `
@@ -799,7 +799,7 @@ function setupUI() {
 }
 function chooseStyle(name, icon, cb, current) {
   modal(`<h2>${name}</h2><p class="sub">Pick a style. You can change it any time.</p>
-    <div class="styles">${STYLES.map((s, k) => `<button class="style-opt ${current === k ? 'cur' : ''}" data-style="${k}" style="--pad:${s.pad};--wall:${s.wall}"><span class="sicon">${icon}</span><span>${s.name}</span></button>`).join('')}</div>
+    <div class="styles">${STYLES.map((s, k) => `<button class="style-opt ${current === k ? 'cur' : ''}" data-style="${k}" style="--pad:${s.pad};--wall:${s.wall}"><span class="sicon">${PLUSH.use(icon)}</span><span>${s.name}</span></button>`).join('')}</div>
     <button class="btn" data-close>Not now</button>`, () => {
     document.querySelectorAll('[data-style]').forEach((b) => (b.onclick = () => cb(+b.dataset.style)));
   });
@@ -807,7 +807,7 @@ function chooseStyle(name, icon, cb, current) {
 function restyleRoomModal(r) {
   const room = ROOMS[r];
   modal(`<h2>${room.name}</h2><p class="sub">Tap a decoration to restyle it.</p>
-    <div class="tasks">${room.tasks.map(([n, ic], i) => `<div class="task done"><span class="ticon">${ic}</span><span class="tname">${n}</span><button class="btn small ghost" data-rr="${i}">${STYLES[S.rooms[r].done[i]].name}</button></div>`).join('')}</div>
+    <div class="tasks">${room.tasks.map(([n, ic], i) => `<div class="task done"><span class="ticon">${PLUSH.use(ic)}</span><span class="tname">${n}</span><button class="btn small ghost" data-rr="${i}">${STYLES[S.rooms[r].done[i]].name}</button></div>`).join('')}</div>
     <button class="btn primary" data-close>Done</button>`, () => {
     document.querySelectorAll('[data-rr]').forEach((b) => (b.onclick = () => {
       const i = +b.dataset.rr;
