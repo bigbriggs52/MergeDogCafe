@@ -25,8 +25,14 @@ Merge treats on the board, serve them to visiting pups, and use the stars you ea
 - `css/style.css`: all styling and animations
 - `js/data.js`: items, dogs, rooms and tuning numbers
 - `js/dogs.js`: the original squishy dog art, drawn as SVG
+- `js/plush.js`: the original plushy item art (treats, drinks, toys, comfort items, garden items, treat boxes, coins, gifts, icons), drawn as SVG
+- `js/version.js`, `version.json`: the game version shown in Settings
 - `js/audio.js`: generated sound effects and background music (no audio files)
 - `js/game.js`: game logic, saving and input
 - `sw.js`, `manifest.webmanifest`, `icons/`: home-screen app and offline support
+
+## Releasing an update
+
+Run `tools/stamp-version.sh` before committing a change. It sets the version (`1.0.0.YYYYMMDD.HHMM`, Eastern time) and refreshes the offline cache, so **Settings → Check for update** on the phone finds the new version.
 
 All names, characters, art and sounds are original.

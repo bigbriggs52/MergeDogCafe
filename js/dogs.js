@@ -67,6 +67,11 @@ function dogSVG(breedId, opts = {}) {
   back += `<ellipse cx="36" cy="${cy + ry - 2}" rx="9" ry="6" fill="${C(b.body)}" stroke="${line}" stroke-width="2"/>`;
   back += `<ellipse cx="64" cy="${cy + ry - 2}" rx="9" ry="6" fill="${C(b.body)}" stroke="${line}" stroke-width="2"/>`;
 
+  // Little side paws (behind the body, so just the tips peek out)
+  const armY = cy + ry * 0.38;
+  back += `<ellipse cx="${50 - rx + 1}" cy="${armY}" rx="8" ry="6.5" transform="rotate(-25 ${50 - rx + 1} ${armY})" fill="${C(b.body)}" stroke="${line}" stroke-width="2"/>`;
+  back += `<ellipse cx="${50 + rx - 1}" cy="${armY}" rx="8" ry="6.5" transform="rotate(25 ${50 + rx - 1} ${armY})" fill="${C(b.body)}" stroke="${line}" stroke-width="2"/>`;
+
   // Body
   let body = `<ellipse cx="50" cy="${cy}" rx="${rx}" ry="${ry}" fill="${C(b.body)}" stroke="${line}" stroke-width="2.2"/>`;
   if (b.fluff) body = `<ellipse cx="50" cy="${cy}" rx="${rx}" ry="${ry}" fill="${C(b.body)}"/>`;
@@ -88,6 +93,11 @@ function dogSVG(breedId, opts = {}) {
     if (b.brows) body += `<ellipse cx="38" cy="45" rx="3" ry="2" fill="${b.brows}"/><ellipse cx="62" cy="45" rx="3" ry="2" fill="${b.brows}"/>`;
   }
 
+  // Plush shading and little front paws
+  if (!sil) {
+    body += `<ellipse cx="50" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#plushShade)"/>`;
+    body += `<ellipse cx="${50 - rx * 0.42}" cy="${cy - ry * 0.5}" rx="${rx * 0.22}" ry="${ry * 0.12}" transform="rotate(-25 ${50 - rx * 0.42} ${cy - ry * 0.5})" fill="#fff" opacity=".55"/>`;
+  }
   // Ears in front of body
   if (b.ear === 'floppy') {
     front += `<ellipse cx="17" cy="50" rx="9" ry="17" transform="rotate(18 17 50)" fill="${C(b.earColor)}" stroke="${line}" stroke-width="2"/>`;

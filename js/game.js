@@ -69,6 +69,16 @@ function itemDef(it) {
   if (it.t === 'pillow') return { icon: '💤', name: 'Sleepy Pillow', color: '#EEE8F7' };
   return { icon: '?', name: '?', color: '#eee' };
 }
+function artKey(it) {
+  if (it.t === 'item') return `${it.c}-${it.l}`;
+  if (it.t === 'gen') return `gen-${it.c}`;
+  if (it.t === 'help') return it.l === 1 ? it.h : `${it.h}-${it.l}`;
+  return it.t; // gift, pillow
+}
+const ICONS = { '🐾': 'paw', '🪙': 'coin', '⭐': 'star' };
+function withArt(str) {
+  return str.replace(/🐾|🪙|⭐/g, (m) => PLUSH.use(ICONS[m], 'inline-art'));
+}
 function sameKind(a, b) {
   if (!a || !b || a.t !== b.t) return false;
   if (a.t === 'item') return a.c === b.c && a.l === b.l && a.l < MAX_LEVEL;
@@ -330,7 +340,7 @@ function doTask(roomIdx, taskIdx, styleIdx) {
       if (j < 0) S.pending.push({ t: 'gen', c: room.unlock.gen, l: 1 });
     }
     if (room.unlock.finale) { S.finale = true; setTimeout(() => showFinale(), 600); }
-    else setTimeout(() => modal(`<div class="big-emoji">🎉</div><h2>${room.name} finished!</h2><p>Unlocked: ${room.unlockText}.</p><p>Next up: <b>${ROOMS[roomIdx + 1].name}</b>.</p><button class="btn primary" data-close>Yay!</button>`), 400);
+    else setTimeout(() => modal(`<div class="big-art">${PLUSH.use('star')}</div><h2>${room.name} finished!</h2><p>Unlocked: ${room.unlockText}.</p><p>Next up: <b>${ROOMS[roomIdx + 1].name}</b>.</p><button class="btn primary" data-close>Yay!</button>`), 400);
   }
   renderTop(); renderCafe(); save();
 }
@@ -352,7 +362,7 @@ function tileHTML(it, i) {
   if (it.t === 'item' && wantedSet.has(`${it.c}:${it.l}`)) cls.push('wanted');
   if (i === selected) cls.push('selected');
   const bg = it.t === 'gen' ? `background: radial-gradient(circle at 35% 30%, #fff 0%, ${d.color} 70%)` : `background: radial-gradient(circle at 35% 30%, #fff 0%, ${d.color} 75%)`;
-  return `<div class="${cls.join(' ')}" style="${bg}"><span class="icon">${d.icon}</span>${extra}${cls.includes('wanted') ? '<span class="check">✓</span>' : ''}</div>`;
+  return `<div class="${cls.join(' ')}" style="${bg}">${PLUSH.use(artKey(it), 'icon')}${extra}${cls.includes('wanted') ? '<span class="check">✓</span>' : ''}</div>`;
 }
 let wantedSet = new Set();
 function computeWanted() {
@@ -406,9 +416,8 @@ function renderOrders() {
     const ready = boardHas(o.items);
     const v = VISITORS.find((x) => x.id === o.dog);
     const items = o.items.map((it) => {
-      const [icon] = CHAINS[it.c].items[it.l - 1];
       const have = !!boardHas([it]);
-      return `<span class="want ${have ? 'have' : ''}" style="background:${CHAINS[it.c].color}">${icon}${have ? '<i>✓</i>' : ''}</span>`;
+      return `<span class="want ${have ? 'have' : ''}" style="background:${CHAINS[it.c].color}">${PLUSH.use(`${it.c}-${it.l}`)}${have ? '<i>✓</i>' : ''}</span>`;
     }).join('');
     card.innerHTML = `
       <div class="bubble">${items}</div>
@@ -426,7 +435,7 @@ function renderInfo() {
   let text = '', btn = '';
   if (it.t === 'item') {
     const next = it.l < MAX_LEVEL ? CHAINS[it.c].items[it.l] : null;
-    text = `<b>${d.name}</b> · Level ${it.l} of ${MAX_LEVEL}${next ? ` · Merge two to make ${next[0]} ${next[1]}` : ' · Top level!'}`;
+    text = `<b>${d.name}</b> · Level ${it.l} of ${MAX_LEVEL}${next ? ` · Merge two to make a ${next[1]}` : ' · Top level!'}`;
     btn = `<button class="btn small" id="sell-btn">Sell 🪙${sellValue(it)}</button>`;
   } else if (it.t === 'gen') {
     text = `<b>${d.name}</b> ${'★'.repeat(it.l)} · Tap to make ${CHAINS[it.c].name.toLowerCase()} treats (1 🐾).${it.l < GEN_MAX_LEVEL ? ' Merge two to upgrade.' : ''}`;
@@ -434,7 +443,7 @@ function renderInfo() {
     text = `<b>${d.name}</b> · Tap to collect ${HELPERS[it.h].values[it.l - 1]} ${HELPERS[it.h].unit}.${it.l < 4 ? ' Merge two for more.' : ''}`;
   } else if (it.t === 'gift') text = `<b>Gift Box</b> · Tap to open!`;
   else if (it.t === 'pillow') text = `<b>Sleepy Pillow</b> · Merge something next to it to wake it up.`;
-  info.innerHTML = `<span class="mini" style="background:${d.color}">${d.icon}</span><span class="txt">${text}</span>${btn}`;
+  info.innerHTML = `<span class="mini" style="background:${d.color}">${PLUSH.use(artKey(it))}</span><span class="txt">${text}</span>${btn}`;
   const sb = $('#sell-btn'); if (sb) sb.onclick = sellSelected;
 }
 function renderCafe() {
@@ -448,7 +457,7 @@ function renderCafe() {
   let scene = `<div class="scene ${dusty ? 'dusty' : ''}" style="--wall:${st.wall};--floor:${st.floor}">
     <div class="wall"></div><div class="floor"></div>`;
   room.tasks.forEach(([name, icon, x, y], i) => {
-    if (done[i] !== null) scene += `<div class="deco" data-restyle="${i}" style="left:${x}%;top:${y}%;--pad:${STYLES[done[i]].pad}"><span>${icon}</span></div>`;
+    if (done[i] !== null) scene += `<div class="deco" data-restyle="${i}" style="left:${x}%;top:${y}%;--pad:${STYLES[done[i]].pad}">${PLUSH.use(icon)}</div>`;
   });
   scene += `<div class="staff s1">${dogSVG('shiba', { mood: dusty ? '' : 'happy' })}</div>
     <div class="staff s2">${dogSVG('pug', { mood: 'happy' })}</div>
@@ -457,8 +466,8 @@ function renderCafe() {
   let list = '';
   room.tasks.forEach(([name, icon], i) => {
     const cost = taskCost(r, i);
-    if (done[i] !== null) list += `<div class="task done"><span class="ticon">${icon}</span><span class="tname">${name}</span><button class="btn small ghost" data-restyle="${i}">Restyle</button></div>`;
-    else list += `<div class="task"><span class="ticon">${icon}</span><span class="tname">${name}</span><button class="btn small ${S.stars >= cost ? 'primary' : ''}" data-task="${i}" ${S.stars >= cost ? '' : 'disabled'}>⭐ ${cost}</button></div>`;
+    if (done[i] !== null) list += `<div class="task done"><span class="ticon">${PLUSH.use(icon)}</span><span class="tname">${name}</span><button class="btn small ghost" data-restyle="${i}">Restyle</button></div>`;
+    else list += `<div class="task"><span class="ticon">${PLUSH.use(icon)}</span><span class="tname">${name}</span><button class="btn small ${S.stars >= cost ? 'primary' : ''}" data-task="${i}" ${S.stars >= cost ? '' : 'disabled'}>${withArt('⭐')} ${cost}</button></div>`;
   });
   const roomsNav = ROOMS.map((rm, k) => `<span class="room-pip ${k < roomsDone() ? 'done' : k === r ? 'cur' : ''}">${k + 1}</span>`).join('');
   $('#cafe').innerHTML = `
@@ -469,11 +478,11 @@ function renderCafe() {
     <div class="tasks">${list}</div>
     <h3>Pantry shop</h3>
     <div class="tasks">
-      <div class="task"><span class="ticon">🦴</span><span class="tname">Paw snack: +50 paw points</span><button class="btn small" data-buy="paw" ${S.coins >= 40 ? '' : 'disabled'}>🪙 40</button></div>
-      ${S.gens.map((g) => `<div class="task"><span class="ticon">${CHAINS[g].gen.icon}</span><span class="tname">Extra ${CHAINS[g].gen.name}</span><button class="btn small" data-buy="gen:${g}" ${S.coins >= 250 ? '' : 'disabled'}>🪙 250</button></div>`).join('')}
+      <div class="task"><span class="ticon">${PLUSH.use('bakery-2')}</span><span class="tname">Paw snack: +50 paw points</span><button class="btn small" data-buy="paw" ${S.coins >= 40 ? '' : 'disabled'}>${withArt('🪙')} 40</button></div>
+      ${S.gens.map((g) => `<div class="task"><span class="ticon">${PLUSH.use('gen-' + g)}</span><span class="tname">Extra ${CHAINS[g].gen.name}</span><button class="btn small" data-buy="gen:${g}" ${S.coins >= 250 ? '' : 'disabled'}>${withArt('🪙')} 250</button></div>`).join('')}
     </div>
     <h3>Earlier rooms</h3>
-    <div class="tasks">${ROOMS.slice(0, roomsDone()).map((rm, k) => k === r ? '' : `<div class="task done"><span class="ticon">✅</span><span class="tname">${rm.name}</span><button class="btn small ghost" data-visit="${k}">Restyle</button></div>`).join('') || '<p class="sub">None yet.</p>'}</div>`;
+    <div class="tasks">${ROOMS.slice(0, roomsDone()).map((rm, k) => k === r ? '' : `<div class="task done"><span class="ticon">${PLUSH.use('star')}</span><span class="tname">${rm.name}</span><button class="btn small ghost" data-visit="${k}">Restyle</button></div>`).join('') || '<p class="sub">None yet.</p>'}</div>`;
 }
 function renderBook() {
   const total = VISITORS.length;
@@ -496,18 +505,27 @@ function renderBook() {
 function renderSettings() {
   $('#settings').innerHTML = `
     <div class="panel-head"><h2>Settings</h2></div>
-    <label class="row">🎵 Music <input type="range" min="0" max="1" step="0.05" value="${S.music}" id="music-vol"></label>
-    <label class="row">🔔 Sounds <input type="range" min="0" max="1" step="0.05" value="${S.sfx}" id="sfx-vol"></label>
+    <div class="card">
+      <label class="srow"><span>Music</span><input type="range" min="0" max="1" step="0.05" value="${S.music}" id="music-vol"></label>
+      <label class="srow"><span>Sounds</span><input type="range" min="0" max="1" step="0.05" value="${S.sfx}" id="sfx-vol"></label>
+    </div>
     <h3>Backup</h3>
-    <p class="sub">Your café saves on this phone automatically. A backup code lets you move it to a new phone.</p>
-    <div class="row-btns"><button class="btn" id="copy-backup">Copy backup code</button><button class="btn" id="restore-backup">Restore from code</button></div>
-    <h3>About</h3>
-    <p class="sub">Pup Café is a calm, ad-free merge game made with love. No ads, no purchases, no tracking. Everything stays on this phone.</p>
-    <p class="sub">Served ${S.served} pups · ${S.totalStars} stars earned.</p>
-    <button class="btn danger" id="reset-game">Start over</button>`;
+    <div class="card">
+      <p class="sub">Your café saves on this phone automatically. A backup code lets you move it to a new phone.</p>
+      <div class="row-btns"><button class="btn" id="copy-backup">Copy backup code</button><button class="btn" id="restore-backup">Restore from code</button></div>
+    </div>
+    <h3>Game</h3>
+    <div class="card version-card">
+      <div class="vrow"><div class="vart">${PLUSH.use('gen-bakery')}</div><div class="vtxt"><b>Pup Café</b><span>Version ${APP_VERSION}</span></div></div>
+      <button class="btn primary wide" id="check-update">Check for update</button>
+      <p class="sub update-status" id="update-status" aria-live="polite"></p>
+    </div>
+    <p class="sub center">No ads, no purchases, no tracking. Everything stays on this phone.<br>Served ${S.served} pups · ${S.totalStars} stars earned.</p>
+    <button class="btn danger-ghost wide" id="reset-game">Start over</button>`;
   $('#music-vol').oninput = (e) => { S.music = +e.target.value; Sound.setMusic(S.music); save(); };
   $('#sfx-vol').oninput = (e) => { S.sfx = +e.target.value; Sound.setSfx(S.sfx); save(); };
   $('#copy-backup').onclick = copyBackup;
+  $('#check-update').onclick = checkForUpdate;
   $('#restore-backup').onclick = () => modal(`<h2>Restore</h2><p class="sub">Paste a backup code. This replaces the café on this phone.</p><textarea id="restore-text" rows="4"></textarea><div class="row-btns"><button class="btn" data-close>Cancel</button><button class="btn primary" id="do-restore">Restore</button></div>`, () => {
     $('#do-restore').onclick = () => {
       try {
@@ -520,6 +538,48 @@ function renderSettings() {
   $('#reset-game').onclick = () => modal(`<h2>Start over?</h2><p class="sub">This erases your café and all pups you've met.</p><div class="row-btns"><button class="btn" data-close>Keep playing</button><button class="btn danger" id="do-reset">Erase and restart</button></div>`, () => {
     $('#do-reset').onclick = () => { localStorage.removeItem(SAVE_KEY); location.reload(); };
   });
+}
+// Quietly check for a new version when the game is opened or brought back, and refresh if there is one.
+let lastAutoCheck = 0;
+async function autoUpdateCheck() {
+  if (Date.now() - lastAutoCheck < 60000 || !navigator.onLine) return;
+  lastAutoCheck = Date.now();
+  try {
+    const res = await fetch(`version.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return;
+    const { version } = await res.json();
+    if (!version || version === APP_VERSION) return;
+    saveNow();
+    if ('serviceWorker' in navigator) { const reg = await navigator.serviceWorker.getRegistration(); if (reg) await reg.update().catch(() => {}); }
+    if (window.caches) { const keys = await caches.keys(); await Promise.all(keys.map((k) => caches.delete(k))); }
+    location.reload();
+  } catch (e) { /* offline or blocked: try again next time */ }
+}
+async function checkForUpdate() {
+  const btn = $('#check-update'), status = $('#update-status');
+  btn.disabled = true; btn.textContent = 'Checking...'; status.textContent = '';
+  try {
+    const res = await fetch(`version.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('http');
+    const { version } = await res.json();
+    if (version && version !== APP_VERSION) {
+      btn.textContent = 'Updating...';
+      status.textContent = `Found version ${version}. Your café is saved.`;
+      saveNow();
+      if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (reg) await reg.update().catch(() => {});
+      }
+      if (window.caches) { const keys = await caches.keys(); await Promise.all(keys.map((k) => caches.delete(k))); }
+      setTimeout(() => location.reload(), 900);
+      return;
+    }
+    status.textContent = 'You have the latest version.';
+    Sound.play('boop');
+  } catch (e) {
+    status.textContent = "Couldn't check right now. Are you online?";
+  }
+  btn.disabled = false; btn.textContent = 'Check for update';
 }
 function copyBackup() {
   const code = btoa(unescape(encodeURIComponent(JSON.stringify(S))));
@@ -559,7 +619,7 @@ function sparkle(el) {
 function floatText(text, el) {
   const f = document.createElement('div');
   f.className = 'float';
-  f.textContent = text;
+  f.innerHTML = withArt(text);
   const r = el ? el.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
   f.style.left = `${r.left + r.width / 2}px`; f.style.top = `${r.top + r.height / 3}px`;
   document.body.appendChild(f);
@@ -584,7 +644,7 @@ function openNap() {
   modal(`<div class="nap-dog">${dogSVG('pug', { mood: 'sleepy' })}</div>
     <h2>${S.paw < 1 ? 'Out of paw points!' : 'Paw points'}</h2>
     <p class="sub">You have ${S.paw} of ${pawMax()}. They refill by 1 every 30 seconds. Serving a pup gives +${SERVE_PAW_BONUS}, and petting a waiting pup gives +${PET_PAW_BONUS}.</p>
-    ${S.paw < 1 ? `<p>Bean can take a quick nap and refill everything, free.</p><button class="btn primary" id="nap-btn">Nap with Bean 💤</button>` : `<p class="sub">When you run out, Bean can nap to refill you for free.</p>`}
+    ${S.paw < 1 ? `<p>Bean can take a quick nap and refill everything, free.</p><button class="btn primary" id="nap-btn">Nap with Bean</button>` : `<p class="sub">When you run out, Bean can nap to refill you for free.</p>`}
     <button class="btn ${S.paw < 1 ? '' : 'primary'}" data-close>${full ? 'Okay' : 'Back to the café'}</button>`, () => {
     const b = $('#nap-btn');
     if (b) b.onclick = () => {
@@ -596,7 +656,7 @@ function openNap() {
   });
 }
 function showFinale() {
-  modal(`<div class="big-emoji">🎉🐶🎂</div><h2>The grand pup party!</h2><p>Every room of Pup Café is finished. Miso, Bean and Waffles throw the biggest party in town!</p><p class="sub">You can keep serving pups, collecting the Pup Book and restyling any room.</p><button class="btn primary" data-close>Party time!</button>`);
+  modal(`<div class="big-art">${PLUSH.use('bakery-8')}</div><h2>The grand pup party!</h2><p>Every room of Pup Café is finished. Miso, Bean and Waffles throw the biggest party in town!</p><p class="sub">You can keep serving pups, collecting the Pup Book and restyling any room.</p><button class="btn primary" data-close>Party time!</button>`);
   Sound.play('tada');
 }
 function advanceTip(n) {
@@ -745,7 +805,7 @@ function setupUI() {
   });
   $('#modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { saveNow(); Sound.pause(); } else { Sound.resume(); tickPaw(); renderTop(); }
+    if (document.hidden) { saveNow(); Sound.pause(); } else { Sound.resume(); tickPaw(); renderTop(); autoUpdateCheck(); }
   });
   window.addEventListener('pagehide', saveNow);
   // Prevent double-tap zoom and pinch on iOS
@@ -755,7 +815,7 @@ function setupUI() {
 }
 function chooseStyle(name, icon, cb, current) {
   modal(`<h2>${name}</h2><p class="sub">Pick a style. You can change it any time.</p>
-    <div class="styles">${STYLES.map((s, k) => `<button class="style-opt ${current === k ? 'cur' : ''}" data-style="${k}" style="--pad:${s.pad};--wall:${s.wall}"><span class="sicon">${icon}</span><span>${s.name}</span></button>`).join('')}</div>
+    <div class="styles">${STYLES.map((s, k) => `<button class="style-opt ${current === k ? 'cur' : ''}" data-style="${k}" style="--pad:${s.pad};--wall:${s.wall}"><span class="sicon">${PLUSH.use(icon)}</span><span>${s.name}</span></button>`).join('')}</div>
     <button class="btn" data-close>Not now</button>`, () => {
     document.querySelectorAll('[data-style]').forEach((b) => (b.onclick = () => cb(+b.dataset.style)));
   });
@@ -763,7 +823,7 @@ function chooseStyle(name, icon, cb, current) {
 function restyleRoomModal(r) {
   const room = ROOMS[r];
   modal(`<h2>${room.name}</h2><p class="sub">Tap a decoration to restyle it.</p>
-    <div class="tasks">${room.tasks.map(([n, ic], i) => `<div class="task done"><span class="ticon">${ic}</span><span class="tname">${n}</span><button class="btn small ghost" data-rr="${i}">${STYLES[S.rooms[r].done[i]].name}</button></div>`).join('')}</div>
+    <div class="tasks">${room.tasks.map(([n, ic], i) => `<div class="task done"><span class="ticon">${PLUSH.use(ic)}</span><span class="tname">${n}</span><button class="btn small ghost" data-rr="${i}">${STYLES[S.rooms[r].done[i]].name}</button></div>`).join('')}</div>
     <button class="btn primary" data-close>Done</button>`, () => {
     document.querySelectorAll('[data-rr]').forEach((b) => (b.onclick = () => {
       const i = +b.dataset.rr;
@@ -776,6 +836,7 @@ function restyleRoomModal(r) {
 
 /* ---------- Boot ---------- */
 function boot() {
+  document.body.insertAdjacentHTML('afterbegin', PLUSH.sprite());
   S = load() || newGame();
   // migrate/repair
   if (!S.pending) S.pending = [];
@@ -786,6 +847,7 @@ function boot() {
   setupBoardInput(); setupUI();
   setInterval(() => { tickPaw(); renderTop(); if (S.pending.length) { placePending(); renderBoard(); } }, 1000);
   saveNow();
+  setTimeout(autoUpdateCheck, 2000);
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 document.addEventListener('DOMContentLoaded', boot);
