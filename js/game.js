@@ -539,6 +539,22 @@ function renderSettings() {
     $('#do-reset').onclick = () => { localStorage.removeItem(SAVE_KEY); location.reload(); };
   });
 }
+// Quietly check for a new version when the game is opened or brought back, and refresh if there is one.
+let lastAutoCheck = 0;
+async function autoUpdateCheck() {
+  if (Date.now() - lastAutoCheck < 60000 || !navigator.onLine) return;
+  lastAutoCheck = Date.now();
+  try {
+    const res = await fetch(`version.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return;
+    const { version } = await res.json();
+    if (!version || version === APP_VERSION) return;
+    saveNow();
+    if ('serviceWorker' in navigator) { const reg = await navigator.serviceWorker.getRegistration(); if (reg) await reg.update().catch(() => {}); }
+    if (window.caches) { const keys = await caches.keys(); await Promise.all(keys.map((k) => caches.delete(k))); }
+    location.reload();
+  } catch (e) { /* offline or blocked: try again next time */ }
+}
 async function checkForUpdate() {
   const btn = $('#check-update'), status = $('#update-status');
   btn.disabled = true; btn.textContent = 'Checking...'; status.textContent = '';
@@ -789,7 +805,7 @@ function setupUI() {
   });
   $('#modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { saveNow(); Sound.pause(); } else { Sound.resume(); tickPaw(); renderTop(); }
+    if (document.hidden) { saveNow(); Sound.pause(); } else { Sound.resume(); tickPaw(); renderTop(); autoUpdateCheck(); }
   });
   window.addEventListener('pagehide', saveNow);
   // Prevent double-tap zoom and pinch on iOS
@@ -831,6 +847,7 @@ function boot() {
   setupBoardInput(); setupUI();
   setInterval(() => { tickPaw(); renderTop(); if (S.pending.length) { placePending(); renderBoard(); } }, 1000);
   saveNow();
+  setTimeout(autoUpdateCheck, 2000);
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 document.addEventListener('DOMContentLoaded', boot);
