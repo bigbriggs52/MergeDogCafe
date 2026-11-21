@@ -256,3 +256,14 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
   -webkit-user-select: text; user-select: text; outline: none; }
 .rename input:focus { border-color: var(--accent); }
 .pup-btns[hidden] { display: none; }
+
+/* Suggestion box */
+.suggest-card { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.suggest-head { display: flex; align-items: center; gap: 10px; }
+.suggest-head .sub { margin: 0; line-height: 1.35; }
+.suggest-dog { width: 58px; height: 56px; flex: none; }
+.suggest-card textarea { width: 100%; box-sizing: border-box; border-radius: 14px; border: 2px solid var(--line); padding: 10px 12px; resize: none;
+  font: 600 16px ui-rounded, 'SF Pro Rounded', system-ui, sans-serif; background: var(--bg); color: var(--ink); -webkit-user-select: text; user-select: text; }
+.suggest-card textarea:focus { outline: none; border-color: var(--accent); }
+.suggest-status:empty { display: none; }
+.suggest-status { margin: 0; text-align: center; }
