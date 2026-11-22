@@ -4,7 +4,7 @@
 // Ideas written while offline (or before the key is set) wait on the phone and send later.
 'use strict';
 
-const SUGGEST_KEY = '';
+const SUGGEST_KEY = '32153820-a177-4dd0-a584-1ba451677c0b';
 const SUGGEST_URL = 'https://api.web3forms.com/submit';
 const SUGGEST_QUEUE = 'pupcafe-suggestions-v1';
 const SUGGEST_MAX = 1000;
