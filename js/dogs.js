@@ -20,6 +20,14 @@ const BREEDS = {
   chihuahua:  { body: '#EBC79A', belly: '#FBE7CB', ear: 'huge', earIn: '#F8C9C0', label: 'Chihuahua' },
   greyhound:  { body: '#BDB7CE', belly: '#E6E2F0', ear: 'fold', earColor: '#A39CBA', tall: true, label: 'Greyhound' },
   bulldog:    { body: '#E7C9A4', belly: '#FFFFFF', ear: 'fold', earColor: '#C89F78', mask: 'jowls', label: 'Bulldog' },
+  labrador:   { body: '#9A6444', belly: '#B98262', ear: 'floppy', earColor: '#7E4E33', label: 'Labrador' },
+  cavalier:   { body: '#FFF8EE', belly: '#FFFFFF', ear: 'longfloppy', earColor: '#C9733F', saddle: '#D98A52', label: 'Cavalier King Charles' },
+  westie:     { body: '#FFFDF5', belly: '#FFFFFF', ear: 'pointy', earIn: '#FFC9D6', label: 'Westie' },
+  cockapoo:   { body: '#F2C79A', belly: '#FBE3C8', ear: 'curly', earColor: '#E3AE7A', topknot: '#E3AE7A', label: 'Cockapoo' },
+  aussie:     { body: '#C9CED8', belly: '#FFFFFF', ear: 'fold', earColor: '#7B8094', spots: '#7B8094', mask: 'blaze', label: 'Australian Shepherd' },
+  basset:     { body: '#FFF8EE', belly: '#FFFFFF', ear: 'longfloppy', earColor: '#8A5A3A', saddle: '#C27B45', wide: true, label: 'Basset Hound' },
+  maltese:    { body: '#FFFDF8', belly: '#FFFFFF', ear: 'longfloppy', earColor: '#F1EBE2', bow: '#B79CF2', label: 'Maltese' },
+  boxer:      { body: '#D98E52', belly: '#FFF6EA', ear: 'fold', earColor: '#B8703C', mask: 'blaze', label: 'Boxer' },
   mystery:    { body: '#CFE8E0', belly: '#FFF2FA', ear: 'pointy', earIn: '#F7C8E0', spots: '#F4B6D2', sparkle: true, label: 'Mystery Pup' },
 };
 

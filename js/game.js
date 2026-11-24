@@ -698,6 +698,11 @@ function showFinale() {
   modal(`<div class="big-art">${PLUSH.use('bakery-8')}</div><h2>The grand pup party!</h2><p>Every room of Ally’s Pup Café is finished. ${pupName('miso')}, ${pupName('bean')} and ${pupName('waffles')} throw the biggest party in town!</p><p class="sub">You can keep serving pups, collecting the Pup Book and restyling any room.</p><button class="btn primary" data-close>Party time!</button>`);
   Sound.play('tada');
 }
+function showNewRooms() {
+  const fresh = ROOMS.slice(6).map((r) => r.name);
+  modal(`<div class="nap-dog">${dogSVG('corgi', { mood: 'happy' })}</div><h2>New places to fix up!</h2><p>The café is growing: a ${fresh.slice(0, -1).join(', ')} and ${fresh[fresh.length - 1]} are waiting after the Rooftop Terrace, each with a new treat box and new pups to meet.</p><button class="btn primary" data-close>Can't wait!</button>`);
+  Sound.play('tada');
+}
 function advanceTip(n) {
   S.tip = n;
   showTip();
@@ -908,6 +913,13 @@ function boot() {
   S = load() || newGame();
   // migrate/repair
   if (!S.pending) S.pending = [];
+  // New rooms (added after this save was made) start empty. Hand out any treat box a finished room now unlocks.
+  const hadRooms = S.rooms.length;
+  while (S.rooms.length < ROOMS.length) S.rooms.push({ done: ROOMS[S.rooms.length].tasks.map(() => null) });
+  S.rooms.forEach((rm, k) => {
+    const g = ROOMS[k].unlock.gen;
+    if (g && rm.done.every((d) => d !== null) && !S.gens.includes(g)) { S.gens.push(g); S.pending.push({ t: 'gen', c: g, l: 1 }); }
+  });
   fillOrders();
   tickPaw();
   Sound.setSfx(S.sfx); Sound.setMusic(S.music);
@@ -916,6 +928,7 @@ function boot() {
   setInterval(() => { tickPaw(); renderTop(); if (S.pending.length) { placePending(); renderBoard(); } }, 1000);
   saveNow();
   setTimeout(autoUpdateCheck, 2000);
+  if (hadRooms < ROOMS.length && hadRooms > 0 && S.served > 0) setTimeout(showNewRooms, 900);
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 document.addEventListener('DOMContentLoaded', boot);

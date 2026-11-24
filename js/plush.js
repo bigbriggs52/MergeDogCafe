@@ -506,6 +506,236 @@ const PLUSH = (() => {
     `<circle cx="30" cy="62" r="3" fill="#FF8FB1"/><circle cx="62" cy="70" r="3" fill="#8FD3FF"/><rect x="44" y="56" width="6" height="2.5" rx="1" transform="rotate(30 47 57)" fill="#FFD84D"/><rect x="72" y="58" width="6" height="2.5" rx="1" transform="rotate(-30 75 59)" fill="#B79CF2"/>` +
     `<path d="M20 92 L32 72 L44 92Z" fill="#FFB3CF" ${st(2.2)}/><path d="M32 72 l-3 -6 6 0Z" fill="#FFD84D"/>` + face(50, 84, 0.0001);
 
+  /* ---------- Book Nook: Story Shelf ---------- */
+  const book = (x, y, w, h, c, page = '#FFF9F0', r = 0) => `<g transform="rotate(${r} ${x + w / 2} ${y + h / 2})"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="${page}" ${st()}/>` +
+    `<rect x="${x - 3}" y="${y - 3}" width="${w}" height="${h}" rx="4" fill="${c}" ${st()}/><path d="M${x + 3} ${y} L${x + 3} ${y + h - 6}" stroke="#fff" stroke-width="2.5" opacity=".6" stroke-linecap="round"/></g>`;
+  A['books-1'] = () => shadow(16) +
+    `<path d="M38 12 L62 12 L62 86 L50 74 L38 86Z" fill="#FF8FB1" ${st()}/>` +
+    `<path d="M50 4 Q44 -2 42 6 Q46 12 50 12 Q54 12 58 6 Q56 -2 50 4Z" fill="#FFD84D" ${st(2)}/>` + face(50, 40, 0.6) + shine(44, 22, 2.5, 5, 0);
+  A['books-2'] = () => shadow(26) + book(26, 26, 46, 56, '#8FD3FF') + `<circle cx="47" cy="38" r="5" fill="#fff" ${st(2)}/>` + face(46, 60, 0.75);
+  A['books-3'] = () => shadow(32) + book(18, 22, 64, 58, '#FFD84D') +
+    `<rect x="26" y="28" width="40" height="26" rx="6" fill="#fff" ${st(2)}/><circle cx="38" cy="44" r="7" fill="#F3A35B" ${st(1.8)}/><path d="M33 38 l-2 -6 5 3 M43 38 l2 -6 -5 3" fill="#F3A35B" ${st(1.5)}/>` +
+    `<path d="M50 50 Q56 36 62 50Z" fill="#7FCB8A" ${st(1.8)}/>` + face(46, 66, 0.65);
+  A['books-4'] = () => shadow(34) +
+    `<rect x="16" y="66" width="68" height="18" rx="5" fill="#B79CF2" ${st()}/><path d="M22 75 L78 75" stroke="#fff" stroke-width="2" stroke-dasharray="4 4"/>` +
+    `<rect x="22" y="48" width="58" height="18" rx="5" transform="rotate(-4 50 57)" fill="#7FCB8A" ${st()}/>` +
+    `<rect x="20" y="30" width="62" height="18" rx="5" transform="rotate(3 50 39)" fill="#FF8FB1" ${st()}/>` +
+    `<rect x="28" y="14" width="46" height="16" rx="5" transform="rotate(-6 50 22)" fill="#8FD3FF" ${st()}/>` + face(50, 40, 0.6) + shine(30, 20, 4, 2, -6);
+  A['books-5'] = () => shadow(38) +
+    `<path d="M6 70 L50 80 L94 70 L94 82 L50 92 L6 82Z" fill="#E9AE6E" ${st()}/>` +
+    `<path d="M8 68 Q30 58 50 72 Q70 58 92 68 L92 74 Q70 66 50 78 Q30 66 8 74Z" fill="#FFF9F0" ${st(2.5)}/>` +
+    `<path d="M24 64 L24 40 L36 26 L48 40 L48 66Z" fill="#FFB3CF" ${st(2.5)}/><path d="M30 64 L30 52 L40 52 L40 64" fill="#fff" ${st(2)}/>` +
+    `<path d="M54 66 Q52 36 72 34 Q90 36 82 60Z" fill="#7FCB8A" ${st(2.5)}/><path d="M68 62 L68 74" ${st(3)}/>` +
+    sparkle(16, 34, 0.7) + face(70, 48, 0.5);
+  A['books-6'] = () => shadow(26) +
+    `<path d="M50 70 L50 82 M34 86 L66 86" ${st(5)}/><path d="M50 70 L50 82" stroke="#E9AE6E" stroke-width="2"/>` +
+    `<path d="M20 40 A32 32 0 0 0 74 64" fill="none" ${st(4)}/>` +
+    `<circle cx="50" cy="42" r="28" fill="#8FD3FF" ${st()}/>` +
+    `<path d="M30 30 Q40 24 44 32 Q40 42 32 40Z M54 50 Q64 44 70 52 Q66 64 56 62Z M56 20 Q64 22 62 28 Q56 28 56 20Z" fill="#8EDB8F" ${st(2)}/>` +
+    shine(38, 26, 6, 3) + face(46, 46, 0.65);
+  A['books-7'] = () => shadow(36) +
+    `<path d="M10 24 Q30 18 50 24 Q70 30 90 24 L90 80 Q70 86 50 80 Q30 74 10 80Z" fill="#FFE9C2" ${st()}/>` +
+    `<path d="M10 24 Q4 30 10 36 M90 80 Q96 74 90 68" fill="none" ${st(2.5)}/>` +
+    `<path d="M22 66 Q30 50 42 56 Q54 62 60 46" fill="none" stroke="#E98A68" stroke-width="3" stroke-dasharray="4 5" stroke-linecap="round"/>` +
+    `<path d="M64 36 L76 48 M76 36 L64 48" stroke="#F0506E" stroke-width="5" stroke-linecap="round"/>` +
+    `<path d="M24 34 Q30 28 36 34 Q30 40 24 34Z" fill="#7FCB8A" ${st(1.8)}/>` + face(36, 62, 0.0001) + face(44, 44, 0.55);
+  A['books-8'] = () => shadow(36) +
+    `<path d="M50 30 Q30 18 10 24 L10 80 Q30 74 50 86 Q70 74 90 80 L90 24 Q70 18 50 30Z" fill="#FFD84D" ${st()}/>` +
+    `<path d="M50 30 L50 86" ${st(3)}/>` +
+    `<path d="M16 30 Q32 26 46 36 L46 78 Q32 70 16 74Z M84 30 Q68 26 54 36 L54 78 Q68 70 84 74Z" fill="#FFF6D6" ${st(2)}/>` +
+    `<path d="M50 14 l3 7 7 1 -5 5 1 7 -6 -3 -6 3 1 -7 -5 -5 7 -1Z" fill="#FFB3CF" ${st(2)}/>` +
+    face(31, 52, 0.55) + pawPrint(69, 54, 0.9, '#E9B830') + sparkle(88, 12, 0.8) + sparkle(10, 12, 0.6);
+  A['gen-books'] = () => shadow(36) +
+    `<rect x="14" y="14" width="72" height="76" rx="10" fill="#E3B57E" ${st()}/>` +
+    `<rect x="20" y="20" width="60" height="30" rx="5" fill="#B98763"/><rect x="20" y="54" width="60" height="30" rx="5" fill="#B98763"/>` +
+    [[24, 24, '#FF8FB1'], [33, 28, '#8FD3FF'], [42, 22, '#FFD84D'], [62, 26, '#7FCB8A']].map(([x, y, c]) => `<rect x="${x}" y="${y}" width="8" height="${50 - y}" rx="2" fill="${c}" ${st(1.8)}/>`).join('') +
+    `<rect x="52" y="28" width="9" height="22" rx="2" transform="rotate(14 56 39)" fill="#B79CF2" ${st(1.8)}/>` +
+    `<path d="M14 52 L86 52" ${st(3)}/>` + face(50, 68, 0.8) + shine(22, 18, 4, 2, 0);
+
+  /* ---------- Doggy Daycare: Craft Box ---------- */
+  A['play-1'] = () => shadow(16) +
+    `<g transform="rotate(30 50 50)"><rect x="40" y="22" width="20" height="56" rx="6" fill="#FF8FB1" ${st()}/><path d="M40 22 L50 6 L60 22Z" fill="#FFB3CF" ${st()}/>` +
+    `<rect x="40" y="58" width="20" height="8" fill="#fff" opacity=".7"/></g>` + face(48, 48, 0.55) + shine(44, 34, 2, 5, 30);
+  A['play-2'] = () => shadow(26) +
+    `<path d="M50 10 L61 36 L89 38 L67 56 L75 84 L50 68 L25 84 L33 56 L11 38 L39 36Z" fill="#FFD84D" ${st()}/>` +
+    `<path d="M50 10 L50 68 M11 38 L67 56 M89 38 L33 56" stroke="#E9B830" stroke-width="1.6" opacity=".7"/>` + face(50, 50, 0.7) + shine(40, 30, 4, 2.5);
+  A['play-3'] = () => shadow(28) +
+    `<path d="M22 36 L50 24 L78 36 L78 74 L50 86 L22 74Z" fill="#8FD3FF" ${st()}/>` +
+    `<path d="M22 36 L50 48 L78 36 M50 48 L50 86" fill="none" ${st(2.5)}/><path d="M22 36 L50 24 L78 36 L50 48Z" fill="#BFE6FF"/>` +
+    `<path d="M22 36 L50 24 L78 36 L50 48Z" fill="none" ${st(2.5)}/>` +
+    `<text x="36" y="72" font-family="ui-rounded,system-ui,sans-serif" font-weight="900" font-size="18" fill="#fff" stroke="${O}" stroke-width="1.5">A</text>` + face(64, 62, 0.5);
+  A['play-4'] = () => shadow(30) +
+    `<rect x="20" y="64" width="28" height="24" rx="5" fill="#FF8FB1" ${st()}/><rect x="52" y="64" width="28" height="24" rx="5" fill="#8FD3FF" ${st()}/>` +
+    `<rect x="34" y="40" width="30" height="24" rx="5" fill="#FFD84D" ${st()}/>` +
+    `<path d="M36 40 L49 18 L62 40Z" fill="#7FCB8A" ${st()}/>` + face(49, 52, 0.55) + shine(26, 70, 3, 2);
+  A['play-5'] = () => shadow(32, 92) +
+    `<path d="M8 50 L92 22 L46 80 L40 58Z" fill="#FFF9F0" ${st()}/><path d="M40 58 L92 22 L54 62Z" fill="#E3D9FF" ${st(2.5)}/>` +
+    `<path d="M14 84 Q24 78 30 84 M6 70 Q14 64 22 70" fill="none" stroke="#B79CF2" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 6"/>` + face(36, 54, 0.5);
+  A['play-6'] = () => shadow(22) +
+    `<path d="M50 6 L50 20" ${st(5)}/><path d="M50 88 L38 66 L62 66Z" fill="#E9AE6E" ${st(2.5)}/>` +
+    `<path d="M14 46 Q50 6 86 46 Q50 86 14 46Z" fill="#B79CF2" ${st()}/>` +
+    `<path d="M24 46 Q50 22 76 46" fill="none" stroke="#FFD84D" stroke-width="5"/><path d="M28 54 Q50 66 72 54" fill="none" stroke="#FF8FB1" stroke-width="5"/>` +
+    face(50, 46, 0.65) + shine(34, 34, 5, 2.5);
+  A['play-7'] = () => shadow(40, 93) +
+    `<path d="M8 82 Q50 100 92 82" fill="none" ${st(7)}/><path d="M8 82 Q50 100 92 82" fill="none" stroke="#E3B57E" stroke-width="3" stroke-linecap="round"/>` +
+    `<path d="M30 84 L34 62 M70 84 L66 62" ${st(4)}/>` +
+    `<path d="M24 62 Q24 46 44 46 L66 46 Q76 46 74 60 Q70 66 26 66Z" fill="#FFF3E0" ${st()}/>` +
+    `<path d="M62 48 L66 22 Q68 10 80 14 Q90 18 88 30 L78 34 L74 48Z" fill="#FFF3E0" ${st()}/>` +
+    `<path d="M66 20 Q60 26 62 40 M70 16 Q62 18 60 30" fill="none" stroke="#FF8FB1" stroke-width="4" stroke-linecap="round"/>` +
+    `<path d="M24 54 Q12 52 14 66" fill="none" stroke="#FF8FB1" stroke-width="5" stroke-linecap="round"/>` +
+    `<rect x="40" y="42" width="16" height="8" rx="3" fill="#8FD3FF" ${st(2)}/>` +
+    `<circle cx="80" cy="24" r="2.6" fill="${O}"/><ellipse cx="86" cy="30" rx="2.5" ry="1.6" fill="#FF8FAB"/>`;
+  A['play-8'] = () => shadow(42, 92) +
+    `<rect x="10" y="50" width="80" height="38" rx="10" fill="#FF8FB1" ${st()}/>` +
+    [16, 38, 62, 84].map((x) => `<rect x="${x - 8}" y="28" width="16" height="30" rx="8" fill="${x % 2 ? '#FFD84D' : '#8FD3FF'}" ${st()}/>`).join('') +
+    [16, 38, 62, 84].map((x) => `<path d="M${x} 28 L${x} 12 L${x + 10} 16 L${x} 20" fill="${x > 50 ? '#B79CF2' : '#7FCB8A'}" ${st(1.8)}/>`).join('') +
+    `<path d="M38 88 L38 70 Q50 58 62 70 L62 88Z" fill="#FFF3E0" ${st()}/>` + face(50, 62, 0.0001) +
+    face(24, 70, 0.5) + face(76, 70, 0.5, 'happy') + sparkle(50, 8, 0.7);
+  A['gen-play'] = () => shadow(36) +
+    `<rect x="12" y="40" width="76" height="48" rx="10" fill="#FFD84D" ${st()}/>` +
+    `<path d="M10 40 L90 40 L84 24 L16 24Z" fill="#FFE98A" ${st()}/>` +
+    `<g transform="rotate(-20 30 26)"><rect x="24" y="4" width="10" height="28" rx="3" fill="#FF8FB1" ${st(2)}/></g>` +
+    `<g transform="rotate(10 60 20)"><rect x="54" y="2" width="10" height="28" rx="3" fill="#8FD3FF" ${st(2)}/></g>` +
+    `<path d="M74 22 l2 -8 3 7 7 -1 -5 6 3 6 -7 -2 -5 5 0 -7 -6 -4Z" fill="#B79CF2" ${st(1.6)}/>` +
+    face(50, 62, 0.85) + shine(20, 50, 3.5, 7, 0);
+
+  /* ---------- Pup Park: Picnic Basket ---------- */
+  A['picnic-1'] = () => shadow(18) +
+    `<path d="M50 30 Q40 18 30 22 M50 30 Q56 16 66 18" fill="none" stroke="#5FAE6E" stroke-width="4" stroke-linecap="round"/>` +
+    `<path d="M50 30 Q34 22 30 38 Q26 58 50 84 Q74 58 70 38 Q66 22 50 30Z" fill="#F0506E" ${st()}/>` +
+    [[40, 46], [58, 44], [50, 60], [42, 70], [60, 64]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="1.6" ry="2.4" fill="#FFE27A"/>`).join('') +
+    `<path d="M50 30 l-8 -6 8 2 8 -2Z" fill="#7FCB8A" ${st(2)}/>` + face(50, 50, 0.55) + shine(38, 36, 3, 5, 20);
+  A['picnic-2'] = () => shadow(28) +
+    `<path d="M50 24 Q48 12 54 6" fill="none" ${st(4)}/><path d="M54 16 Q66 4 76 12 Q66 22 54 16Z" fill="#7FCB8A" ${st(2.5)}/>` +
+    `<path d="M50 26 Q30 14 18 34 Q8 56 26 78 Q38 92 50 84 Q62 92 74 78 Q92 56 82 34 Q70 14 50 26Z" fill="#FF7A7A" ${st()}/>` +
+    shine(30, 38, 5, 9, 20) + face(50, 54, 0.85);
+  A['picnic-3'] = () => shadow(36) +
+    `<path d="M14 50 L50 30 L86 50 L50 70Z" fill="#FFF3D6" ${st()}/>` +
+    `<path d="M14 50 L14 60 L50 80 L86 60 L86 50 L50 70Z" fill="#7FCB8A" ${st(2.5)}/>` +
+    `<path d="M14 58 L50 78 L86 58 L86 66 L50 86 L14 66Z" fill="#F3C677" ${st(2.5)}/>` +
+    `<path d="M18 52 Q26 60 34 56 Q42 64 50 60" fill="none" stroke="#FF9EB5" stroke-width="4" stroke-linecap="round"/>` + face(50, 48, 0.6);
+  A['picnic-4'] = () => shadow(26) +
+    `<path d="M58 4 L52 40" ${st(5)}/><path d="M58 4 L52 40" stroke="#FF8FB1" stroke-width="2" stroke-linecap="round"/>` +
+    `<path d="M24 28 L76 28 L70 84 Q50 92 30 84Z" fill="#FFF6B5" fill-opacity=".9" ${st()}/>` +
+    `<path d="M27 46 L73 46 L70 84 Q50 92 30 84Z" fill="#FFE45C"/><path d="M24 28 L76 28 L70 84 Q50 92 30 84Z" fill="none" ${st()}/>` +
+    `<circle cx="72" cy="30" r="12" fill="#FFE45C" ${st(2.5)}/><path d="M72 20 L72 40 M62 30 L82 30 M65 23 L79 37 M79 23 L65 37" stroke="#fff" stroke-width="1.8"/>` +
+    face(48, 64, 0.65) + shine(32, 40, 2.5, 6, 0);
+  A['picnic-5'] = () => shadow(20) +
+    `<rect x="44" y="70" width="12" height="20" rx="5" fill="#E9C9A6" ${st()}/>` +
+    `<path d="M28 34 Q28 10 50 10 Q72 10 72 34 L72 70 Q72 76 66 76 L34 76 Q28 76 28 70Z" fill="#B79CF2" ${st()}/>` +
+    `<path d="M28 44 L72 44 L72 58 L28 58Z" fill="#FF9EC1"/><path d="M28 34 Q28 10 50 10 Q72 10 72 34 L72 70 Q72 76 66 76 L34 76 Q28 76 28 70Z" fill="none" ${st()}/>` +
+    face(50, 64, 0.6) + shine(38, 22, 3, 6, 10);
+  A['picnic-6'] = () => shadow(38) +
+    `<path d="M8 40 Q8 86 50 86 Q92 86 92 40Z" fill="#6FC47A" ${st()}/>` +
+    `<path d="M14 40 Q16 78 50 78 Q84 78 86 40Z" fill="#FFF6EA"/><path d="M18 40 Q20 72 50 72 Q80 72 82 40Z" fill="#FF7A8A"/>` +
+    `<path d="M8 40 L92 40" ${st()}/>` +
+    [[26, 48], [34, 60], [74, 48], [66, 60], [50, 68]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="2" ry="3" fill="${O}"/>`).join('') +
+    face(50, 52, 0.7, 'happy') + sparkle(88, 20, 0.6);
+  A['picnic-7'] = () => shadow(38) +
+    `<path d="M10 56 L90 56 L84 84 Q50 92 16 84Z" fill="#E9AE6E" ${st()}/>` +
+    `<path d="M12 56 Q12 40 50 38 Q88 40 88 56Z" fill="#B23A5E" ${st()}/>` +
+    `<path d="M20 50 L80 46 M24 42 L76 54 M50 38 L50 56" stroke="#F2C38A" stroke-width="5" stroke-linecap="round"/>` +
+    `<path d="M8 58 Q14 52 20 58 Q26 52 32 58 Q38 52 44 58 Q50 52 56 58 Q62 52 68 58 Q74 52 80 58 Q86 52 92 58" fill="none" stroke="#F2C38A" stroke-width="5" stroke-linecap="round"/>` +
+    `<path d="M8 58 Q14 52 20 58 Q26 52 32 58 Q38 52 44 58 Q50 52 56 58 Q62 52 68 58 Q74 52 80 58 Q86 52 92 58" fill="none" ${st(1.5)}/>` +
+    face(50, 72, 0.75) + `<path d="M46 30 q4 -10 8 0 q-4 4 -8 0Z" fill="#fff" opacity=".8"/>`;
+  A['picnic-8'] = () => shadow(36) +
+    `<path d="M14 72 L86 72 L80 88 L20 88Z" fill="#FFF3E0" ${st()}/><ellipse cx="50" cy="72" rx="38" ry="7" fill="#fff" ${st(2.5)}/>` +
+    `<circle cx="28" cy="62" r="11" fill="#FF7A7A" ${st(2.5)}/><circle cx="72" cy="62" r="11" fill="#FFD84D" ${st(2.5)}/><circle cx="50" cy="64" r="12" fill="#7FCB8A" ${st(2.5)}/>` +
+    `<circle cx="38" cy="44" r="10" fill="#FF9F43" ${st(2.5)}/><circle cx="62" cy="44" r="10" fill="#B79CF2" ${st(2.5)}/>` +
+    `<circle cx="50" cy="26" r="11" fill="#F0506E" ${st(2.5)}/><path d="M50 15 Q48 6 56 4" fill="none" ${st(2.5)}/><path d="M54 8 Q62 2 66 8 Q60 12 54 8Z" fill="#7FCB8A" ${st(1.8)}/>` +
+    face(50, 64, 0.5, 'happy') + sparkle(86, 30, 0.8) + sparkle(14, 36, 0.6);
+  A['gen-picnic'] = () => shadow(38) +
+    `<path d="M24 44 Q24 8 50 8 Q76 8 76 44" fill="none" ${st(9)}/><path d="M24 44 Q24 8 50 8 Q76 8 76 44" fill="none" stroke="#E9AE6E" stroke-width="5"/>` +
+    `<path d="M10 42 L90 42 L82 86 Q50 94 18 86Z" fill="#E9AE6E" ${st()}/>` +
+    `<path d="M16 56 L86 56 M18 70 L84 70" stroke="#C9965C" stroke-width="3"/><path d="M30 44 L28 88 M50 44 L50 90 M70 44 L72 88" stroke="#C9965C" stroke-width="2.5"/>` +
+    `<path d="M12 42 L48 42 L44 56 L36 48 L30 58 L24 48 L16 56Z" fill="#FF8FB1" ${st(2.5)}/><path d="M18 44 l4 4 M30 44 l4 4 M40 44 l4 4" stroke="#fff" stroke-width="2.5"/>` +
+    face(62, 64, 0.8) + shine(70, 50, 4, 2, 0);
+
+  /* ---------- Vet Clinic: Care Kit ---------- */
+  A['care-1'] = () => shadow(26) +
+    `<path d="M30 70 Q14 70 16 54 Q14 38 30 36 Q34 20 50 22 Q66 20 70 36 Q86 38 84 54 Q86 70 70 70 Q60 80 50 76 Q40 80 30 70Z" fill="#FFFFFF" ${st()}/>` +
+    `<path d="M26 50 Q30 44 36 46" fill="none" stroke="#E8E2F2" stroke-width="3" stroke-linecap="round"/>` + face(50, 54, 0.8);
+  A['care-2'] = () => shadow(30) +
+    `<g transform="rotate(-30 50 50)"><rect x="8" y="34" width="84" height="32" rx="16" fill="#F7C9A0" ${st()}/><rect x="36" y="36" width="28" height="28" rx="5" fill="#FFE9D6" ${st(2)}/>` +
+    face(50, 48, 0.5) +
+    [[20, 44], [20, 56], [80, 44], [80, 56]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.4" fill="#D9A27A"/>`).join('') + `</g>`;
+  A['care-3'] = () => shadow(30) +
+    `<path d="M50 84 Q14 62 14 38 Q14 18 32 18 Q44 18 50 30 Q56 18 68 18 Q86 18 86 38 Q86 62 50 84Z" fill="#FF8FB1" ${st()}/>` +
+    `<path d="M50 78 Q22 60 22 40 Q22 26 33 26" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="3 5" stroke-linecap="round"/>` +
+    face(50, 48, 0.85) + shine(30, 30, 5, 3);
+  A['care-4'] = () => shadow(26) +
+    `<g transform="rotate(-35 50 50)"><rect x="44" y="34" width="12" height="60" rx="6" fill="#8FD3FF" ${st()}/>` +
+    `<rect x="40" y="12" width="20" height="24" rx="5" fill="#fff" ${st()}/>` +
+    face(50, 22, 0.42) +
+    `<path d="M50 4 Q60 -2 62 8 Q56 10 50 4Z" fill="#B9E7F8" ${st(1.5)}/></g>` + '';
+  A['care-5'] = () => shadow(32) +
+    `<path d="M50 56 L46 90" ${st(9)}/><path d="M50 56 L46 90" stroke="#B79CF2" stroke-width="5" stroke-linecap="round"/>` +
+    `<ellipse cx="50" cy="40" rx="34" ry="24" fill="#E3D9FF" ${st()}/>` +
+    `<path d="M22 30 Q50 10 78 30" fill="none" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/>` +
+    [24, 33, 42, 51, 60, 69, 76].map((x) => `<path d="M${x} 58 L${x - 1} 66" ${st(2)}/>`).join('') + face(50, 40, 0.75);
+  A['care-6'] = () => shadow(28) +
+    `<path d="M30 12 Q24 40 34 54 Q46 68 58 54 Q68 40 64 12" fill="none" ${st(7)}/><path d="M30 12 Q24 40 34 54 Q46 68 58 54 Q68 40 64 12" fill="none" stroke="#8FD3FF" stroke-width="3.5" stroke-linecap="round"/>` +
+    `<circle cx="30" cy="12" r="4" fill="#E3D9FF" ${st(2)}/><circle cx="64" cy="12" r="4" fill="#E3D9FF" ${st(2)}/>` +
+    `<path d="M46 62 Q46 80 62 80" fill="none" ${st(7)}/><path d="M46 62 Q46 80 62 80" fill="none" stroke="#8FD3FF" stroke-width="3.5" stroke-linecap="round"/>` +
+    `<circle cx="70" cy="78" r="14" fill="#E3D9FF" ${st()}/><circle cx="70" cy="78" r="8" fill="#FFF" ${st(2)}/>` +
+    `<path d="M70 82 Q63 77 66 74 Q68 72 70 75 Q72 72 74 74 Q77 77 70 82Z" fill="#FF8FB1"/>` + `<g transform="translate(-4 -6)">${face(50, 40, 0.0001)}</g>`;
+  A['care-7'] = () => shadow(34) +
+    `<circle cx="26" cy="28" r="12" fill="#E9C9A6" ${st()}/><circle cx="74" cy="28" r="12" fill="#E9C9A6" ${st()}/><circle cx="26" cy="28" r="6" fill="#FFB3CF"/><circle cx="74" cy="28" r="6" fill="#FFB3CF"/>` +
+    `<ellipse cx="50" cy="68" rx="30" ry="24" fill="#E9C9A6" ${st()}/>` +
+    `<circle cx="50" cy="42" r="26" fill="#E9C9A6" ${st()}/><ellipse cx="50" cy="52" rx="11" ry="8" fill="#FFF3E0"/>` +
+    `<rect x="54" y="20" width="22" height="9" rx="4" transform="rotate(30 65 24)" fill="#fff" ${st(2)}/>` +
+    `<path d="M50 86 Q34 76 38 68 Q42 62 50 70 Q58 62 62 68 Q66 76 50 86Z" fill="#FF8FB1" ${st(2)}/>` + face(50, 44, 0.75);
+  A['care-8'] = () => shadow(30) +
+    `<path d="M36 6 L44 34 M64 6 L56 34" ${st(8)}/><path d="M36 6 L44 34" stroke="#8FD3FF" stroke-width="4" stroke-linecap="round"/><path d="M64 6 L56 34" stroke="#FF8FB1" stroke-width="4" stroke-linecap="round"/>` +
+    `<path d="M50 90 Q14 68 14 46 Q14 28 32 28 Q44 28 50 40 Q56 28 68 28 Q86 28 86 46 Q86 68 50 90Z" fill="#FFD84D" ${st()}/>` +
+    `<path d="M50 82 Q22 64 22 46 Q22 36 32 36" fill="none" stroke="#FFF3B0" stroke-width="4" stroke-linecap="round"/>` +
+    face(50, 56, 0.85) + sparkle(86, 18, 0.8) + sparkle(14, 20, 0.6);
+  A['gen-care'] = () => shadow(36) +
+    `<path d="M36 30 L36 20 Q36 14 42 14 L58 14 Q64 14 64 20 L64 30" fill="none" ${st(6)}/>` +
+    `<rect x="12" y="30" width="76" height="56" rx="12" fill="#62C2B5" ${st()}/><rect x="12" y="44" width="76" height="6" fill="#4FA89C"/>` +
+    `<rect x="38" y="54" width="24" height="24" rx="5" fill="#fff" ${st(2.5)}/>` +
+    `<path d="M50 74 Q40 68 42 62 Q44 58 50 63 Q56 58 58 62 Q60 68 50 74Z" fill="#FF8FB1"/>` +
+    face(50, 38, 0.0001) + `<g transform="translate(0 -4)">${face(50, 40, 0.0001)}</g>` + shine(22, 36, 4, 2, 0) +
+    `<circle cx="26" cy="68" r="3" fill="${O}"/><circle cx="74" cy="68" r="3" fill="${O}"/><ellipse cx="22" cy="74" rx="3" ry="2" fill="#FF8FAB" opacity=".6"/><ellipse cx="78" cy="74" rx="3" ry="2" fill="#FF8FAB" opacity=".6"/>`;
+
+  /* ---------- New room decorations ---------- */
+  A['d-armchair'] = () => shadow(36) +
+    `<path d="M22 50 Q20 16 50 16 Q80 16 78 50Z" fill="#B79CF2" ${st()}/>` +
+    `<rect x="16" y="50" width="68" height="26" rx="10" fill="#B79CF2" ${st()}/><rect x="26" y="48" width="48" height="14" rx="7" fill="#E3D9FF" ${st(2.5)}/>` +
+    `<rect x="8" y="40" width="16" height="36" rx="8" fill="#9C82E0" ${st()}/><rect x="76" y="40" width="16" height="36" rx="8" fill="#9C82E0" ${st()}/>` +
+    `<path d="M22 76 L22 88 M78 76 L78 88" ${st(5)}/>` + face(50, 34, 0.7) + shine(34, 26, 5, 3);
+  A['d-ballpit'] = () => shadow(40) +
+    [[24, 40, '#FF8FB1'], [40, 34, '#FFD84D'], [56, 38, '#8FD3FF'], [72, 36, '#7FCB8A'], [32, 30, '#B79CF2'], [64, 28, '#FF9F43'], [48, 26, '#FF8FB1']].map(([x, y, c]) =>
+      `<circle cx="${x}" cy="${y}" r="9" fill="${c}" ${st(2.2)}/>`).join('') +
+    `<rect x="10" y="42" width="80" height="44" rx="14" fill="#8FD3FF" ${st()}/><rect x="10" y="42" width="80" height="12" rx="6" fill="#BFE6FF" ${st(2.5)}/>` + face(50, 68, 0.8);
+  A['d-slide'] = () => shadow(40) +
+    `<path d="M22 88 L22 20 M40 88 L40 20" ${st(4)}/><path d="M22 34 L40 34 M22 50 L40 50 M22 66 L40 66" ${st(3)}/>` +
+    `<path d="M40 20 Q70 24 76 66 Q80 82 92 84 L92 92 Q70 92 66 68 Q60 34 40 30Z" fill="#FFD84D" ${st()}/>` +
+    `<rect x="18" y="14" width="26" height="8" rx="4" fill="#FF8FB1" ${st(2.5)}/>` + face(68, 54, 0.5);
+  A['d-rainbow'] = () => shadow(40) +
+    [['#FF8FB1', 40], ['#FFD84D', 32], ['#7FCB8A', 24], ['#8FD3FF', 16]].map(([c, r]) => `<path d="M${50 - r} 74 A${r} ${r} 0 0 1 ${50 + r} 74" fill="none" stroke="${O}" stroke-width="${10}"/><path d="M${50 - r} 74 A${r} ${r} 0 0 1 ${50 + r} 74" fill="none" stroke="${c}" stroke-width="6"/>`).join('') +
+    `<path d="M2 78 Q2 66 14 68 Q18 58 28 64 Q36 64 34 76 Q34 84 24 84 L10 84 Q2 84 2 78Z M98 78 Q98 66 86 68 Q82 58 72 64 Q64 64 66 76 Q66 84 76 84 L90 84 Q98 84 98 78Z" fill="#fff" ${st(2.5)}/>` +
+    face(50, 66, 0.55);
+  A['d-bench'] = () => shadow(40) +
+    `<rect x="10" y="22" width="80" height="12" rx="5" fill="#E3B57E" ${st()}/><rect x="10" y="38" width="80" height="12" rx="5" fill="#E3B57E" ${st()}/>` +
+    `<rect x="6" y="56" width="88" height="12" rx="5" fill="#E3B57E" ${st()}/>` +
+    `<path d="M18 50 L18 56 M82 50 L82 56 M16 68 L14 88 M84 68 L86 88" ${st(5)}/>` + face(50, 44, 0.6);
+  A['d-hoop'] = () => shadow(30) +
+    `<path d="M20 90 L20 70 M80 90 L80 70" ${st(5)}/>` +
+    `<circle cx="50" cy="46" r="32" fill="none" stroke="${O}" stroke-width="14"/><circle cx="50" cy="46" r="32" fill="none" stroke="#FF8FB1" stroke-width="9" stroke-dasharray="14 10"/>` +
+    `<circle cx="50" cy="46" r="32" fill="none" stroke="#FFD84D" stroke-width="9" stroke-dasharray="10 14" stroke-dashoffset="12"/>` + face(50, 46, 0.6, 'happy');
+  A['d-scale'] = () => shadow(36) +
+    `<rect x="10" y="60" width="80" height="24" rx="8" fill="#E3D9FF" ${st()}/>` +
+    `<circle cx="50" cy="40" r="24" fill="#FFF" ${st()}/><circle cx="50" cy="40" r="18" fill="none" stroke="#62C2B5" stroke-width="3" stroke-dasharray="3 5"/>` +
+    `<path d="M50 40 L60 30" ${st(3)}/><path d="M44 64 L50 56 L56 64" fill="none" ${st(3)}/>` + pawPrint(28, 72, 0.7, '#B79CF2') + pawPrint(72, 72, 0.7, '#B79CF2') + face(50, 46, 0.0001);
+  A['d-fishtank'] = () => shadow(38) +
+    `<rect x="12" y="20" width="76" height="58" rx="10" fill="#BFE6FF" fill-opacity=".85" ${st()}/>` +
+    `<path d="M14 34 Q50 28 86 34" stroke="#fff" stroke-width="3" fill="none" opacity=".8"/>` +
+    `<path d="M40 52 Q48 42 58 50 L66 44 L66 58 L58 52 Q48 62 40 52Z" fill="#FF9F43" ${st(2)}/><circle cx="46" cy="50" r="1.8" fill="${O}"/>` +
+    `<path d="M22 76 Q20 62 26 56 M30 76 Q32 64 28 58 M74 76 Q76 62 70 58" fill="none" stroke="#7FCB8A" stroke-width="4" stroke-linecap="round"/>` +
+    `<circle cx="70" cy="34" r="3" fill="none" stroke="#fff" stroke-width="2"/><circle cx="64" cy="26" r="2" fill="none" stroke="#fff" stroke-width="1.6"/>` +
+    `<rect x="8" y="78" width="84" height="10" rx="4" fill="#B98763" ${st()}/>`;
+
   // Build one hidden <svg> sprite so every tile can reuse a drawing with <use>.
   function sprite() {
     return `<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0" aria-hidden="true">` +

@@ -266,6 +266,114 @@ const SCENES = (() => {
           `<rect x="162" y="226" width="80" height="12" rx="5" fill="${p.light}" ${st()}/><path d="M170 238 L168 258 M234 238 L236 258" ${st(4)}/>` + use('bakery-8', 174, 168, 58) },
       ],
     },
+    { // 7. Book Nook (from Ally's suggestion)
+      kind: 'indoor', floorTask: 0,
+      base: () => plainWindow(170, 22, 64, 76),
+      dogs: (happy, done) => [done[2] !== null ? ['shiba', 276, 128, 50, happy ? 'happy' : '', 'mid'] : ['shiba', 290, 190, 54, '', 'front'], ['pug', 160, 196, 50, happy ? 'sleepy' : '', 'front'], ['corgi', 22, 194, 54, '', 'front']],
+      tasks: [
+        { z: 0, draw: () => '' },
+        { z: 1, draw: (p) => {
+          const books = (x0, y, w) => { let s = '', x = x0, k = 0; const c = ['#FF8FB1', '#8FD3FF', '#FFD84D', '#B79CF2', '#B9E7C8', '#FF9F7A'];
+            while (x < x0 + w - 8) { const bw = 7 + (k % 3) * 2, bh = 22 + (k * 7) % 9; s += `<rect x="${x}" y="${y - bh}" width="${bw}" height="${bh}" rx="2" fill="${c[k % c.length]}" ${st(1.6)}/>`; x += bw + 1; k++; } return s; };
+          return `<rect x="8" y="22" width="84" height="${FLOOR + 14 - 22}" rx="8" fill="${p.main}" ${st()}/>` +
+            [60, 100, 140].map((y) => `<path d="M10 ${y} L90 ${y}" ${st(3)}/>`).join('') + books(14, 58, 74) + books(14, 98, 50) + books(16, 138, 72) +
+            `<rect x="150" y="112" width="104" height="${FLOOR + 6 - 112}" rx="6" fill="${p.main}" ${st()}/><path d="M152 136 L252 136" ${st(2.5)}/>` +
+            `<rect x="146" y="104" width="112" height="12" rx="6" fill="${p.light}" ${st(2.5)}/>` + books(156, 134, 94) + books(160, 176, 40); } },
+        { z: 2, draw: (p) =>
+          `<path d="M268 168 Q264 116 304 116 Q344 116 340 168Z" fill="${p.accent}" ${st()}/>` +
+          `<rect x="262" y="166" width="84" height="34" rx="12" fill="${p.accent}" ${st()}/><rect x="274" y="160" width="60" height="18" rx="9" fill="${p.light}" ${st(2.5)}/>` +
+          `<rect x="254" y="152" width="20" height="46" rx="10" fill="${p.dark}" ${st()}/><rect x="334" y="152" width="20" height="46" rx="10" fill="${p.dark}" ${st()}/>` +
+          `<path d="M270 198 L268 214 M338 198 L340 214" ${st(5)}/>` },
+        { z: 3, draw: (p) =>
+          `<circle cx="374" cy="96" r="50" fill="url(#glow)"/><path d="M374 92 L374 212 M360 214 L388 214" ${st(5)}/>` +
+          `<path d="M354 96 L362 66 L386 66 L394 96Z" fill="${p.light}" ${st()}/><circle cx="374" cy="100" r="5" fill="#FFE27A" ${st(1.8)}/>` },
+        { z: 3, draw: (p) =>
+          `<ellipse cx="124" cy="196" rx="26" ry="7" fill="${p.light}" ${st()}/><path d="M124 202 L124 238 M110 240 L138 240" ${st(5)}/>` + use('books-6', 100, 146, 48) },
+        { z: 4, draw: () => use('books-4', 188, 192, 50) + use('books-3', 232, 214, 34) },
+        { z: 0, draw: (p) => `<ellipse cx="210" cy="232" rx="150" ry="22" fill="${p.accent}" ${st()}/><ellipse cx="210" cy="232" rx="118" ry="14" fill="none" stroke="${p.light}" stroke-width="5" stroke-dasharray="10 8"/>` },
+        { z: 1, draw: (p) => `<rect x="274" y="22" width="80" height="62" rx="6" fill="${p.light}" ${st()}/>` + use('books-7', 278, 18, 72) +
+          [[280, 28], [348, 28]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4" fill="${p.accent}" ${st(1.5)}/>`).join('') },
+      ],
+    },
+    { // 8. Doggy Daycare (from Ally's suggestion)
+      kind: 'indoor', floorTask: 0,
+      base: () => plainWindow(300, 30, 56, 70),
+      dogs: (happy, done) => [done[2] !== null ? ['corgi', 58, 146, 50, 'happy', 'mid'] : ['corgi', 70, 192, 54, '', 'front'], done[3] !== null ? ['pug', 312, 66, 42, happy ? 'happy' : '', 'mid'] : ['pug', 330, 190, 50, '', 'front'], ['shiba', 200, 196, 52, happy ? 'happy' : '', 'front']],
+      tasks: [
+        { z: 0, draw: () => '' },
+        { z: 0, draw: () => [['#FF8FB1', 96], ['#FFD84D', 80], ['#B9E7C8', 64], ['#8FD3FF', 48]].map(([c, r]) =>
+          `<path d="M${180 - r} ${FLOOR - 34} A${r} ${r} 0 0 1 ${180 + r} ${FLOOR - 34}" fill="none" stroke="${O}" stroke-width="18"/><path d="M${180 - r} ${FLOOR - 34} A${r} ${r} 0 0 1 ${180 + r} ${FLOOR - 34}" fill="none" stroke="${c}" stroke-width="12"/>`).join('') +
+          cloud(62, 112, 0.9) + cloud(256, 112, 0.9) },
+        { z: 3, draw: (p) =>
+          [[34, 204, '#FF8FB1'], [52, 196, '#FFD84D'], [72, 200, '#8FD3FF'], [92, 194, '#B9E7C8'], [112, 202, '#B79CF2'], [130, 198, '#FF9F43'], [44, 212, '#8FD3FF'], [84, 210, '#FF8FB1'], [122, 210, '#FFD84D']].map(([x, y, c]) =>
+            `<circle cx="${x}" cy="${y}" r="10" fill="${c}" ${st(2.2)}/>`).join('') +
+          `<rect x="18" y="206" width="132" height="44" rx="14" fill="${p.accent}" ${st()}/><rect x="18" y="206" width="132" height="12" rx="6" fill="${p.light}" ${st(2.5)}/>` },
+        { z: 2, draw: (p) =>
+          `<path d="M318 ${FLOOR + 60} L318 112 M346 ${FLOOR + 60} L346 112" ${st(5)}/><path d="M318 136 L346 136 M318 160 L346 160 M318 184 L346 184 M318 208 L346 208" ${st(3)}/>` +
+          `<rect x="310" y="104" width="44" height="12" rx="5" fill="${p.accent}" ${st(2.5)}/>` +
+          `<path d="M346 112 Q376 116 380 170 Q384 222 398 228 L398 240 Q370 240 366 190 Q360 130 346 126Z" fill="${p.main}" ${st()}/>` },
+        { z: 1, draw: (p) =>
+          `<rect x="8" y="34" width="92" height="96" rx="8" fill="${p.main}" ${st()}/><path d="M54 36 L54 128 M10 82 L98 82" ${st(3)}/>` +
+          [[16, 44], [60, 44], [16, 90], [60, 90]].map(([x, y], k) => `<rect x="${x}" y="${y}" width="32" height="30" rx="6" fill="${p.light}"/>` +
+            `<ellipse cx="${x + 16}" cy="${y + 24}" rx="14" ry="6" fill="${k % 2 ? p.accent : '#FFB3CF'}" ${st(2)}/>`).join('') + use('d-cushion', 60, 92, 26) },
+        { z: 4, draw: () => use('play-4', 228, 200, 50) + use('play-3', 270, 218, 34) },
+        { z: 2, draw: () => use('play-7', 130, 136, 70) },
+        { z: 5, draw: () => stringLights(6, 26, ['#FFD84D', '#FFB3CF', '#8FD3FF', '#B9E7C8', '#B79CF2'], 'star') },
+      ],
+    },
+    { // 9. Pup Park (outdoors, from Ally's suggestion)
+      kind: 'garden',
+      base: (p, s, done) => cloud(50, 20, 0.8) + cloud(300, 40, 0.6) +
+        `<path d="M0 ${FLOOR} Q60 120 140 ${FLOOR - 14} Q220 110 300 ${FLOOR - 10} Q360 128 400 ${FLOOR - 6} L400 ${FLOOR} Z" fill="#B9DDA0" ${st(2)}/>` +
+        (done[0] === null ? [...Array(16)].map((_, k) => { const x = 10 + k * 25, y = 186 + (k * 37) % 66; return `<path d="M${x} ${y} l3 -16 3 16 M${x + 6} ${y} l7 -14 1 14" stroke="#6E9F5E" stroke-width="3" fill="none" stroke-linecap="round"/>`; }).join('') : ''),
+      dogs: (happy, done) => [done[2] !== null ? ['shiba', 62, 138, 48, happy ? 'happy' : '', 'mid'] : ['shiba', 70, 196, 52, '', 'front'], ['pug', 138, 200, 48, happy ? 'happy' : '', 'front'], ['corgi', 252, 194, 54, happy ? 'happy' : '', 'front']],
+      tasks: [
+        { z: 0, draw: () => [...Array(5)].map((_, k) => `<rect x="${k * 80}" y="${FLOOR}" width="40" height="${H - FLOOR}" fill="#BFE6A8" opacity=".55"/>`).join('') },
+        { z: 1, draw: () => [[6, 78, 1], [350, 70, 0.85]].map(([x, y, s]) => `<g transform="translate(${x} ${y}) scale(${s})">` +
+          `<path d="M28 ${110} L32 40 L44 40 L48 ${110}Z" fill="#B98763" ${st()}/>` +
+          `<circle cx="20" cy="30" r="26" fill="#7FCB8A" ${st()}/><circle cx="50" cy="18" r="28" fill="#8DD48F" ${st()}/><circle cx="62" cy="44" r="20" fill="#7FCB8A" ${st()}/>` +
+          `<circle cx="30" cy="18" r="3.5" fill="#FF8FB1"/><circle cx="58" cy="30" r="3.5" fill="#FF8FB1"/></g>`).join('') },
+        { z: 2, draw: (p) =>
+          `<rect x="30" y="152" width="96" height="12" rx="5" fill="${p.main}" ${st(2.5)}/><rect x="30" y="168" width="96" height="12" rx="5" fill="${p.main}" ${st(2.5)}/>` +
+          `<rect x="24" y="182" width="108" height="12" rx="5" fill="${p.light}" ${st(2.5)}/><path d="M36 194 L34 216 M120 194 L122 216" ${st(5)}/>` },
+        { z: 2, draw: () => use('garden-8', 150, 96, 100) },
+        { z: 4, draw: () => use('d-hoop', 312, 190, 62) + use('d-hoop', 286, 214, 36) },
+        { z: 3, draw: (p) => `<path d="M100 240 L208 222 L250 252 L130 262Z" fill="${p.accent}" ${st()}/>` +
+          `<path d="M127 236 L163 258 M154 231 L190 256 M181 226 L222 254" stroke="#fff" stroke-width="5" opacity=".7"/>` + use('gen-picnic', 196, 204, 40) + use('picnic-6', 150, 224, 30) },
+        { z: 6, draw: () => `<path d="M260 50 Q240 110 270 ${FLOOR + 30}" fill="none" stroke="${O}" stroke-width="1.5"/>` + use('toys-6', 232, 0, 60) },
+        { z: 1, draw: (p) =>
+          `<rect x="290" y="118" width="74" height="56" rx="6" fill="${p.light}" ${st()}/><path d="M294 136 L360 136" ${st(2)}/>` +
+          `<path d="M282 118 L298 92 L356 92 L372 118Z" fill="${p.accent}" ${st()}/><path d="M298 92 L294 118 M318 92 L318 118 M336 92 L340 118" stroke="#fff" stroke-width="5"/>` +
+          `<path d="M296 92 L296 70 M358 92 L358 70" ${st(3)}/>` + use('picnic-4', 298, 98, 34) + use('picnic-1', 330, 106, 24) },
+      ],
+    },
+    { // 10. Vet Clinic (from Ally's suggestion)
+      kind: 'indoor', floorTask: 0,
+      base: () => plainWindow(232, 28, 52, 66),
+      dogs: (happy, done) => [done[2] !== null ? ['pug', 196, 108, 48, happy ? 'happy' : '', 'mid'] : ['pug', 196, 196, 50, '', 'front'], done[1] !== null ? ['shiba', 52, 80, 46, 'happy', 'back'] : ['shiba', 62, 192, 52, '', 'front'], done[3] !== null ? ['corgi', 312, 166, 52, happy ? 'happy' : '', 'front'] : ['corgi', 320, 196, 52, '', 'front']],
+      tasks: [
+        { z: 0, draw: () => '' },
+        { z: 2, draw: (p) =>
+          `<rect x="14" y="116" width="132" height="14" rx="6" fill="${p.light}" ${st()}/>` +
+          `<rect x="20" y="128" width="120" height="68" rx="8" fill="${p.main}" ${st()}/>` +
+          `<circle cx="80" cy="162" r="16" fill="${p.light}" ${st(2.5)}/><path d="M80 172 Q68 164 71 157 Q74 152 80 158 Q86 152 89 157 Q92 164 80 172Z" fill="#FF8FB1"/>` },
+        { z: 2, draw: (p) =>
+          `<rect x="166" y="150" width="110" height="16" rx="7" fill="${p.light}" ${st()}/><path d="M184 166 L182 214 M258 166 L260 214" ${st(5)}/>` +
+          `<rect x="178" y="142" width="86" height="12" rx="6" fill="${p.accent}" ${st(2.5)}/>` + use('care-6', 252, 112, 40) },
+        { z: 3, draw: () => use('d-scale', 300, 196, 70) },
+        { z: 3, draw: () => use('gen-bakery', 104, 74, 44) },
+        { z: 1, draw: (p) =>
+          `<rect x="300" y="110" width="92" height="64" rx="6" fill="${p.main}" ${st()}/><path d="M346 112 L346 172" ${st(2)}/>` + use('d-fishtank', 300, 30, 92) },
+        { z: 4, draw: (p) =>
+          `<path d="M14 226 Q14 212 30 212 L94 212 Q110 212 110 226 L104 250 Q62 258 20 250Z" fill="#E9AE6E" ${st()}/>` +
+          `<path d="M18 230 L106 230 M20 242 L104 242" stroke="#C9965C" stroke-width="2.5"/>` + use('care-7', 34, 168, 54) + use('care-1', 72, 194, 28) },
+        { z: 1, draw: (p) =>
+          `<path d="M148 0 L156 16 M212 0 L204 16" ${st(2)}/><rect x="120" y="14" width="120" height="44" rx="14" fill="${p.light}" ${st()}/>` +
+          `<rect x="127" y="21" width="106" height="30" rx="9" fill="none" stroke="${p.accent}" stroke-width="2.5" stroke-dasharray="6 4"/>` +
+          `<text x="190" y="43" text-anchor="middle" font-family="ui-rounded, 'SF Pro Rounded', system-ui, sans-serif" font-weight="800" font-size="15" fill="${O}">Pup Vet</text>` +
+          use('care-3', 128, 22, 28) },
+      ],
+    },
   ];
 
   function dominantStyle(done) {
