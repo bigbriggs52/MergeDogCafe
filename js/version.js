@@ -1,2 +1,2 @@
 // Set by tools/stamp-version.sh
-const APP_VERSION = '1.0.0.20261122.1224';
+const APP_VERSION = '1.0.0.20261124.1628';

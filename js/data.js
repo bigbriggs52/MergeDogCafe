@@ -48,8 +48,41 @@ const CHAINS = {
       ['💐', 'Bouquet'], ['🪴', 'Potted Plant'], ['🌳', 'Little Tree'], ['⛲', 'Fountain'],
     ],
   },
+  // Treat boxes from Ally's new rooms (the art is drawn in plush.js; icons here are unused)
+  books: {
+    name: 'Story', color: '#EADCC8', deep: '#C39C6E',
+    gen: { name: 'Story Shelf', icon: '' },
+    items: [
+      ['', 'Bookmark'], ['', 'Pocket Book'], ['', 'Picture Book'], ['', 'Book Stack'],
+      ['', 'Pop-up Book'], ['', 'Story Globe'], ['', 'Treasure Map'], ['', 'Golden Storybook'],
+    ],
+  },
+  play: {
+    name: 'Playtime', color: '#FFF1B5', deep: '#EFC64A',
+    gen: { name: 'Craft Box', icon: '' },
+    items: [
+      ['', 'Crayon'], ['', 'Paper Star'], ['', 'Building Block'], ['', 'Block Tower'],
+      ['', 'Paper Plane'], ['', 'Spinning Top'], ['', 'Rocking Horse'], ['', 'Bouncy Castle'],
+    ],
+  },
+  picnic: {
+    name: 'Picnic', color: '#FFD4CC', deep: '#EE8E80',
+    gen: { name: 'Picnic Basket', icon: '' },
+    items: [
+      ['', 'Strawberry'], ['', 'Apple'], ['', 'Sandwich'], ['', 'Lemonade'],
+      ['', 'Ice Pop'], ['', 'Watermelon'], ['', 'Berry Pie'], ['', 'Fruit Tower'],
+    ],
+  },
+  care: {
+    name: 'Care', color: '#CDEFEA', deep: '#62C2B5',
+    gen: { name: 'Care Kit', icon: '' },
+    items: [
+      ['', 'Cotton Ball'], ['', 'Bandage'], ['', 'Heart Sticker'], ['', 'Toothbrush'],
+      ['', 'Fluffy Brush'], ['', 'Stethoscope'], ['', 'Get-Well Bear'], ['', 'Golden Heart'],
+    ],
+  },
 };
-const CHAIN_ORDER = ['bakery', 'drinks', 'toys', 'comfort', 'garden'];
+const CHAIN_ORDER = ['bakery', 'drinks', 'toys', 'comfort', 'garden', 'books', 'play', 'picnic', 'care'];
 const MAX_LEVEL = 8;
 const GEN_MAX_LEVEL = 3;
 
@@ -82,6 +115,14 @@ const VISITORS = [
   { id: 'pip',     name: 'Pip',     breed: 'chihuahua',  bio: 'Small dog, big opinions.', room: 4 },
   { id: 'zoom',    name: 'Zoom',    breed: 'greyhound',  bio: 'Fastest dog in town, laziest dog at home.', room: 4 },
   { id: 'pudding', name: 'Pudding', breed: 'bulldog',    bio: 'Snores during his own order.', room: 5 },
+  { id: 'cocoa',   name: 'Cocoa',   breed: 'labrador',   bio: 'Reads one page, naps for two.', room: 6 },
+  { id: 'rosie',   name: 'Rosie',   breed: 'cavalier',   bio: 'Loves a happy ending and a warm lap.', room: 6 },
+  { id: 'snowy',   name: 'Snowy',   breed: 'westie',     bio: 'First to the ball pit, last to leave.', room: 7 },
+  { id: 'toffee',  name: 'Toffee',  breed: 'cockapoo',   bio: 'Has a best friend in every room.', room: 7 },
+  { id: 'marble',  name: 'Marble',  breed: 'aussie',     bio: 'Counts the ducks in the pond every morning.', room: 8 },
+  { id: 'waddles', name: 'Waddles', breed: 'basset',     bio: 'Takes the long way round the park. On purpose.', room: 8 },
+  { id: 'pearl',   name: 'Pearl',   breed: 'maltese',    bio: 'Here for her check-up and a treat. Mostly the treat.', room: 9 },
+  { id: 'clover',  name: 'Clover',  breed: 'boxer',      bio: 'Brave at the vet, as long as someone holds her paw.', room: 9 },
   { id: 'mochi',   name: 'Mochi',   breed: 'mystery',    bio: 'A rare mystery pup. Nobody knows where Mochi comes from.', room: 0, rare: true },
 ];
 
@@ -123,11 +164,36 @@ const ROOMS = [
       ['Make a photo wall', 'd-photo', 35, 25], ['Tune the piano', 'd-piano', 40, 70], ['Toss in bean bags', 'd-beanbag', 70, 82],
       ['Set out a tea set', 'gen-drinks', 55, 60], ['Hang a chandelier', 'd-chandelier', 50, 15],
     ] },
-  { name: 'Rooftop Terrace', unlock: { finale: true }, unlockText: 'The grand pup party!',
+  { name: 'Rooftop Terrace', unlock: { gen: 'books' }, unlockText: 'Story Shelf and new visitors',
     tasks: [
       ['Lay deck boards', 'd-deck', 50, 88], ['Fill the planters', 'd-sunflower', 12, 70], ['Open a sun umbrella', 'd-umbrella', 70, 50],
       ['String twinkle lights', 'd-twinkle', 50, 15], ['Set up a telescope', 'd-telescope', 88, 40], ['Hang a hammock', 'd-hammock', 25, 45],
       ['Hang a party banner', 'd-banner', 50, 28], ['Bake the party cake', 'bakery-8', 50, 65],
+    ] },
+  // Rooms 7 to 10 came from Ally's suggestion box.
+  { name: 'Book Nook', unlock: { gen: 'play' }, unlockText: 'Craft Box and new visitors',
+    tasks: [
+      ['Polish the wood floor', 'd-broom', 50, 85], ['Build tall bookshelves', 'books-4', 15, 45], ['Add a reading armchair', 'd-armchair', 70, 70],
+      ['Hang a reading lamp', 'd-lamp', 80, 30], ['Spin a story globe', 'books-6', 40, 60], ['Stack the picture books', 'books-3', 55, 80],
+      ['Roll out a story rug', 'd-rug', 50, 88], ['Pin up a treasure map', 'books-7', 50, 25],
+    ] },
+  { name: 'Doggy Daycare', unlock: { gen: 'picnic' }, unlockText: 'Picnic Basket and new visitors',
+    tasks: [
+      ['Lay soft play mats', 'd-mat', 50, 85], ['Paint a rainbow wall', 'd-rainbow', 50, 25], ['Build a ball pit', 'd-ballpit', 25, 75],
+      ['Set up a little slide', 'd-slide', 80, 65], ['Add nap cubbies', 'd-bed', 12, 45], ['Fill the block corner', 'play-4', 60, 80],
+      ['Add a rocking horse', 'play-7', 40, 70], ['Hang paper stars', 'play-2', 50, 12],
+    ] },
+  { name: 'Pup Park', unlock: { gen: 'care' }, unlockText: 'Care Kit and new visitors',
+    tasks: [
+      ['Mow a fresh lawn', 'garden-2', 50, 85], ['Plant shady trees', 'garden-7', 15, 40], ['Add a park bench', 'd-bench', 30, 70],
+      ['Build a splash fountain', 'garden-8', 60, 60], ['Set up agility hoops', 'd-hoop', 85, 70], ['Spread a picnic', 'gen-picnic', 45, 85],
+      ['Fly a kite', 'toys-6', 75, 20], ['Open a lemonade stand', 'picnic-4', 85, 45],
+    ] },
+  { name: 'Vet Clinic', unlock: { finale: true }, unlockText: 'The grand pup party!',
+    tasks: [
+      ['Mop the clinic floor', 'd-broom', 50, 85], ['Set up the front desk', 'd-counter', 30, 65], ['Add a cozy check-up table', 'care-6', 70, 65],
+      ['Add a pup weighing scale', 'd-scale', 85, 80], ['Fill the get-well treat jar', 'gen-bakery', 20, 50], ['Add a calm fish tank', 'd-fishtank', 80, 35],
+      ['Fill a cuddle basket', 'care-7', 15, 80], ['Hang a heart sign', 'care-8', 50, 18],
     ] },
 ];
 
